@@ -7,16 +7,17 @@ import Swal from "sweetalert2";
 
 const useV1PostInstallment = () => {
   const [payload, setPayload] = useState<
-    Partial<Omit<TParamsPostInstallment, "orderid">>
+    Partial<Omit<TParamsPostInstallment, "transactionid">>
   >({
     amount: undefined,
+    description: "",
   });
   const getV1PostInstallment = async (
-    params: Pick<TParamsPostInstallment, "orderid">,
+    params: Pick<TParamsPostInstallment, "transactionid">,
     callBackFunction?: (params?: any) => any,
   ) => {
-    const { amount } = payload;
-    const { orderid } = params;
+    const { amount, description } = payload;
+    const { transactionid } = params;
 
     if (Number(amount) <= 0 || isNaN(Number(amount))) {
       await Swal.fire({
@@ -30,7 +31,8 @@ const useV1PostInstallment = () => {
 
     const response = await Instance_ApiLocal.localPostInstallment({
       amount: payload.amount!,
-      orderid,
+      transactionid,
+      description: description || ""
     });
 
     if (response.status !== EAPIStatusCodes.success) {

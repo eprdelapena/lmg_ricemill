@@ -9,7 +9,9 @@ export enum EParamsDefault {
   succesStatusCode = 200,
   success="success",
   ondelivery="ondelivery",
-  pending="pending"
+  pending="pending",
+  notpaid="notpaid",
+  paid="paid"
 }
 
 export enum EAccountType {

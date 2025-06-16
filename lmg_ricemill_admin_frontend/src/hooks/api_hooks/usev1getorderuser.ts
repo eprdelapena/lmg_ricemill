@@ -1,5 +1,5 @@
 import Instance_ApiLocal from "@/api/api_local";
-import { EAPIStatusCodes } from "@/enum/main_enum";
+import { EAPIStatusCodes, EParamsDefault } from "@/enum/main_enum";
 import { TDataGetOrderUser, TParamsGetOrderUser } from "@/schema/main_schema";
 import { useState } from "react";
 
@@ -12,9 +12,8 @@ const useV1GetOrderUser = () => {
     begin: undefined,
     end: undefined,
     category: undefined,
-    type: undefined,
     search: undefined,
-    estatustype: "pending",
+    status: EParamsDefault.notpaid,
   });
   const getV1GetOrderUser = async () => {
     const response = await Instance_ApiLocal.localGetOrderUser({

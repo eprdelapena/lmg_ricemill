@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 const useV1DeleteOrderUser = () => {
   const getV1DeleteOrderUser = async (payload: {
-    orderId: string;
+    transactionid: string;
     callbackFunction?: any;
   }) => {
     const confirmation = await Swal.fire({
@@ -22,7 +22,7 @@ const useV1DeleteOrderUser = () => {
       return;
     }
 
-    const { orderId, callbackFunction } = payload;
+    const { transactionid, callbackFunction } = payload;
 
     Swal.fire({
       title: "Loading",
@@ -35,7 +35,7 @@ const useV1DeleteOrderUser = () => {
     });
 
     const response = await Instance_ApiLocal.localDeleteOrderUser({
-      orderid: orderId,
+      transactionid,
     });
 
     Swal.close();

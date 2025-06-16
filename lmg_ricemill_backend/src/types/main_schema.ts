@@ -184,7 +184,7 @@ export type TParamsPostInstallment = {
 };
 
 export type TParamsGetInstallment = {
-  orderid: string;
+  transactionid: string;
   skip?: number;
 };
 
@@ -372,7 +372,7 @@ export type TPostOrderUserParams = {
 };
 
 export type TGetProductsParams = {
-  searchType: ESearchTypeProducts;
+  searchType: string;
   searchText: string;
   skip: number;
 };

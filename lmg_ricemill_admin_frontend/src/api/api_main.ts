@@ -5,12 +5,14 @@ import {
   TDataGetMonthlyIncome,
   TDataGetOrderUser,
   TDataGetPendingOrders,
+  TDataGetProductCategory,
   TDataGetProducts,
   TDataLogTable,
   TParamsDeleteInstallment,
   TParamsDeleteLogTable,
   TParamsDeleteOrderUser,
   TParamsDeleteProduct,
+  TParamsDeleteProductCategory,
   TParamsDeleteUser,
   TParamsEditAdmin,
   TParamsEditInstallment,
@@ -23,6 +25,7 @@ import {
   TParamsGetMonthlyIncome,
   TParamsGetOrderUser,
   TParamsGetPendingOrders,
+  TParamsGetProductCategory,
   TParamsGetProducts,
   TParamsLogin,
   TParamsOrderGenerateBarcode,
@@ -30,6 +33,7 @@ import {
   TParamsPostInstallment,
   TParamsPostOrderUser,
   TParamsPostProduct,
+  TParamsPostProductCategory,
   TParamsRegister,
   TParamsViewOrderItem,
   TRequestConfig,
@@ -167,6 +171,27 @@ class NextClient {
   ): Promise<TResponseMainAPI> {
     return await this.client.post("/v9/edit/admin", payload, config);
   }
+  
+  public async mainGetProductCategory(
+    payload: TParamsGetProductCategory,
+    config: TRequestConfig,
+  ): Promise<TResponseMainAPI<TDataGetProductCategory>> {
+    return await this.client.post("/v9/get/productcategory", payload, config);
+  }
+
+  public async mainPostProductCategory(
+    payload: TParamsPostProductCategory,
+    config: TRequestConfig,
+  ): Promise<TResponseMainAPI> {
+    return await this.client.post("/v9/post/productcategory", payload, config);
+  }
+
+  public async mainDeleteProductCategory(
+    payload: TParamsDeleteProductCategory,
+    config: TRequestConfig,
+  ): Promise<TResponseMainAPI> {
+    return await this.client.post("/v9/delete/productcategory", payload, config);
+  }
 
   public async mainGetInstallment(
     payload: TParamsGetInstallment,
@@ -246,6 +271,9 @@ class NextClient {
   public async mainDownloadInstallmentTable(config: TRequestConfig): Promise<unknown> {
     return await this.client.get("/v9/download/installmenttable", config);
   }
+
+
+
 }
 
 const client = new NextClient();

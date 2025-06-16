@@ -14,10 +14,10 @@ const v9_get_installment = async (
   req: Request<{}, {}, TParamsGetInstallment>,
   res: Response<IResponseSuccess<any> | IResponseFail>,
 ): Promise<void> => {
-  const { orderid } = req.body;
+  const { transactionid } = req.body;
 
   const paymentList = await db.query.installment.findMany({
-    where: and(eq(InstallmentTable.orderid, orderid)),
+    where: and(eq(InstallmentTable.transactionid, transactionid), eq(InstallmentTable.agentcode, (req as any).agentcode)),
     orderBy: desc(OrderUserTable.id),
   });
 

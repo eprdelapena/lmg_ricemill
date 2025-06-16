@@ -2,31 +2,20 @@ import Instance_ApiLocal from "@/api/api_local";
 import {
   EAdminRoutes,
   EAPIStatusCodes,
-  EParamsDefault,
 } from "@/enum/main_enum";
 import { TParamsPostOrders, TParamsPostOrderUser } from "@/schema/main_schema";
 import { useState } from "react";
 import Swal from "sweetalert2";
-import {
-  regionProvinceMap,
-  provinceAndCities,
-  philippineRegions,
-} from "@/utils/main_utils";
 import { signOut } from "next-auth/react";
+
 const useV1PostOrderUser = () => {
-  const [payload, setPayload] = useState<Partial<TParamsPostOrderUser>>({
-    username: undefined,
-    receiverfirstname: undefined,
-    receiverlastname: undefined,
-    receivermobile: undefined,
-    region: undefined,
-    municity: undefined,
-    barangay: undefined,
-    province: undefined,
-    address: undefined,
-    originsite: undefined,
-    downpayment: undefined,
-    type: "on_hand_layaway"
+  const [payload, setPayload] = useState<Partial<Omit<TParamsPostOrderUser, "orders">>>({
+    fullname: "",
+    spouse: "",
+    address: "",
+    mobile: "",
+    description: "",
+    currentpayment: "0.00",
   });
 
   const getV1PostOrderUser = async (params: {
@@ -35,61 +24,30 @@ const useV1PostOrderUser = () => {
       category: string;
     })[];
     userId: string;
-    totalprice: string;
+    totalcost: string;
   }) => {
-    const { currentCart, userId, totalprice } = params;
+    const { currentCart, userId, totalcost } = params;
 
     const {
-      username,
-      receiverfirstname,
-      receiverlastname,
-      receivermobile,
-      region,
-      municity,
-      barangay,
-      type,
+      fullname,
+      spouse,
       address,
-      originsite,
-      downpayment,
+      mobile,
+      description,
+      currentpayment
     } = payload;
 
-    const isInformationInvalid =
-      !username ||
-      !receiverfirstname ||
-      !receiverlastname ||
-      !receivermobile ||
-      !region ||
-      !municity ||
-      !barangay ||
-      !address ||
-      !originsite ||
-      !downpayment ||
-      currentCart?.length === 0;
-
-    console.log(
-      username,
-      receiverfirstname,
-      receiverlastname,
-      receivermobile,
-      region,
-      municity,
-      barangay,
-      address,
-      originsite,
-      downpayment,
-      "hello",
-    );
-    if (isInformationInvalid) {
+    if(!fullname){
       Swal.fire({
         title: "Error",
-        text: "Please fill up all the fields",
+        text: "Fullname field is required",
         icon: "error",
         confirmButtonText: "Try again",
       });
       return;
     }
 
-    if (!/^09\d{9}$/.test(receivermobile)) {
+    if (mobile && !/^09\d{9}$/.test(mobile)) {
       Swal.fire({
         title: "Error",
         text: "Invalid phone format",
@@ -98,7 +56,7 @@ const useV1PostOrderUser = () => {
       });
       return;
     }
-    if (isNaN(Number(downpayment))) {
+    if (currentpayment && isNaN(Number(currentpayment))) {
       Swal.fire({
         title: "Error",
         text: "Downpayment must be a number",
@@ -108,7 +66,7 @@ const useV1PostOrderUser = () => {
       return;
     }
 
-    if (isNaN(Number(totalprice))) {
+    if (isNaN(Number(totalcost))) {
       Swal.fire({
         title: "Error",
         text: "Total cost must be a number",
@@ -135,7 +93,7 @@ const useV1PostOrderUser = () => {
     const response = await Instance_ApiLocal.localPostOrderUser({
       ...(payload as TParamsPostOrderUser),
       orders: filteredCart,
-      totalcost: totalprice,
+      totalcost,
     });
 
     Swal.close();
@@ -165,9 +123,6 @@ const useV1PostOrderUser = () => {
     getV1PostOrderUser,
     payload,
     setPayload,
-    regionProvinceMap,
-    provinceAndCities,
-    philippineRegions,
   };
 };
 

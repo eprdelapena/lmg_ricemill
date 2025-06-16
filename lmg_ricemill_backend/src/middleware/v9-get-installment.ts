@@ -17,6 +17,14 @@ const MW_v9_get_installment = async (
   >,
   next: NextFunction,
 ): Promise<void> => {
+
+  const { transactionid } = req.body;
+
+  if (!transactionid || typeof transactionid !== "string" || transactionid.includes(" ")) {
+    res.status(200).json(RequestStatusObject.invalidField);
+    return;
+  }
+  
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -38,14 +46,10 @@ const MW_v9_get_installment = async (
       res.status(200).json(RequestStatusObject.invalidAuthorization);
       return;
     }
+
+    (req as any).agentcode = result.agentcode;
   }
 
-  const { orderid } = req.body;
-
-  if (!orderid || typeof orderid !== "string" || orderid.includes(" ")) {
-    res.status(200).json(RequestStatusObject.invalidField);
-    return;
-  }
 
   next();
 };

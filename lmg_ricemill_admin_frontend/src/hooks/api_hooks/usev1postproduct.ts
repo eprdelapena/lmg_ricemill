@@ -8,33 +8,9 @@ import Swal from "sweetalert2";
 const useV1PostProduct = () => {
   const [payload, setPayload] = useState<TParamsPostProduct>({
     title: "",
-    price: "",
-    cost: "",
     category: "",
-    image: undefined,
-    quantityxxs: 0,
-    quantityxs: 0,
-    quantittys: 0,
-    quantitym: 0,
-    quantityl: 0,
-    quantityxl: 0,
-    quantityxxl: 0,
-    quantity5: 0,
-    quantity55: 0,
-    quantity6: 0,
-    quantity65: 0,
-    quantity7: 0,
-    quantity75: 0,
-    quantity8: 0,
-    quantity85: 0,
-    quantity9: 0,
-    quantity95: 0,
-    quantity100: 0,
-    quantity105: 0,
-    quantitty110: 0,
-    quantity115: 0,
-    quantity120: 0,
-    quantitydefault: 0,
+    price: "",
+    quantity: 0
   });
 
   const isValidDecimal = (num: string) => {
@@ -42,33 +18,28 @@ const useV1PostProduct = () => {
   };
 
   const getV1PostProduct = async (params: { callBackFunction?: any }) => {
-    const { title, price, category, image, cost } = payload;
+    const { title, price, category, quantity } = payload;
 
-    if (
-      !title ||
-      !["bags", "shoes", "clothes", "jewelry", "watches", "others"].includes(
-        category,
-      )
-    ) {
-      await Swal.fire({
+    if(title.length === 0){
+      Swal.fire({
         title: "Error",
-        text: "Please fill up all fields",
+        text: "Product must have a name",
         icon: "error",
         confirmButtonText: "Try again",
       });
       return;
     }
 
-    if (!image) {
-      await Swal.fire({
+    if(category.length === 0){
+      Swal.fire({
         title: "Error",
-        text: "Please input product image",
+        text: "Category must not be empty",
         icon: "error",
         confirmButtonText: "Try again",
       });
       return;
     }
-
+    
     if (isNaN(Number(price))) {
       await Swal.fire({
         title: "Error",
@@ -89,33 +60,13 @@ const useV1PostProduct = () => {
       return;
     }
 
-    if (isNaN(Number(cost))) {
-      await Swal.fire({
-        title: "Error",
-        text: "Cost must be a number",
-        icon: "error",
-        confirmButtonText: "Try again",
-      });
-      return;
-    }
-
-    if (!isValidDecimal(cost)) {
-      await Swal.fire({
-        title: "Error",
-        text: "Cost field must not exceed two decimal places",
-        icon: "error",
-        confirmButtonText: "Try again",
-      });
-      return;
-    }
-
     Swal.fire({
       title: "Loading",
       text: "Please wait...",
       allowOutsideClick: false,
       showConfirmButton: false,
       didOpen: () => {
-        Swal.showLoading(); // Start the loader animation
+        Swal.showLoading();
       },
     });
 

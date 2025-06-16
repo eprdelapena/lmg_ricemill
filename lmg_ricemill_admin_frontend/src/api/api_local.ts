@@ -199,7 +199,7 @@ class CApiLocal extends AxiosService {
   }
 
   async localEditInstallment(
-    data: TParamsEditInstallment,
+    data: Partial<TParamsEditInstallment>,
   ): Promise<TResponseMainAPI> {
     return await this.sendByPost({
       url: "/api/admin/edit_installment",

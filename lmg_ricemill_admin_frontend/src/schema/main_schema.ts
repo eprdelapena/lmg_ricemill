@@ -42,38 +42,16 @@ export type TParamsOrderGenerateBarcode = {
 }
 
 export type TParamsEditProduct = {
-  productid: number;
-  title?: string;
-  price?: string;
-  cost?: string;
-  category?: string;
-  quantityxxs?: number;
-  quantityxs?: number;
-  quantittys?: number;
-  quantitym?: number;
-  quantityl?: number;
-  quantityxl?: number;
-  quantityxxl?: number;
-  quantity5?: number;
-  quantity55?: number;
-  quantity6?: number;
-  quantity65?: number;
-  quantity7?: number;
-  quantity75?: number;
-  quantity8?: number;
-  quantity85?: number;
-  quantity9?: number;
-  quantity95?: number;
-  quantity100?: number;
-  quantity105?: number;
-  quantitty110?: number;
-  quantity115?: number;
-  quantity120?: number;
-  quantitydefault?: number;
+  productid: string;
+  title: string;
+  category: string;
+  price: string;
+  quantity: number;
 };
 
 export type TParamsGetInstallment = {
-  orderid: string;
+  transactionid: string;
+  skip?: number;
 };
 
 export type TDataGetInstallment = {
@@ -92,33 +70,9 @@ export type TParamsEditAdmin = {
 
 export type TParamsPostProduct = {
   title: string;
-  price: string;
   category: string;
-  cost: string;
-  image?: string;
-  quantityxxs: number;
-  quantityxs: number;
-  quantittys: number;
-  quantitym: number;
-  quantityl: number;
-  quantityxl: number;
-  quantityxxl: number;
-  quantity5: number;
-  quantity55: number;
-  quantity6: number;
-  quantity65: number;
-  quantity7: number;
-  quantity75: number;
-  quantity8: number;
-  quantity85: number;
-  quantity9: number;
-  quantity95: number;
-  quantity100: number;
-  quantity105: number;
-  quantitty110: number;
-  quantity115: number;
-  quantity120: number;
-  quantitydefault: number;
+  price: string;
+  quantity: number;
 };
 
 export type TDataViewOrderItem = {
@@ -208,58 +162,43 @@ export type TParamsGetMonthlyIncome = {
 
 export type TDataGetProducts = {
   id: number;
-  productid: number;
-  cost: string;
-  title: string;
-  price: string;
-  expense: string;
-  earning: string;
-  expected: string;
-  image: string;
-  imageone: string;
-  imagetwo: string;
-  imagethree: string;
-  category: string;
-  description: string;
-  searchtag: string;
-  totalorders: number;
-  successorders: number;
-  pendingorders: number;
-  quantityxxs: number;
-  quantityxs: number;
-  quantitys: number;
-  quantitym: number;
-  quantityl: number;
-  quantityxl: number;
-  quantityxxl: number;
-  quantity5: number;
-  quantity55: number;
-  quantity6: number;
-  quantity65: number;
-  quantity7: number;
-  quantity75: number;
-  quantity8: number;
-  quantity85: number;
-  quantity9: number;
-  quantity95: number;
-  quantity100: number;
-  quantity105: number;
-  quantity110: number;
-  quantity115: number;
-  quantity120: number;
-  quantitydefault: number;
+  productid: string;
+  agentcode: string,
+  title: string,
+  price: string,
+  isshow: boolean,
+  category: string,
+  quantity: number,
   regdate: string;
 };
+
+export type TParamsPostProductCategory = {
+  category: string, 
+}
+
+export type TParamsDeleteProductCategory = {
+  id: number,
+}
+
+export type TParamsGetProductCategory = {
+  
+}
 
 export type TParamsDeleteProduct = {
   productid: number;
 };
 
 export type TParamsGetProducts = {
-  searchType?: "category" | "productid" | "title" | "searchtag";
+  searchType?: "category" | "productid" | "title";
   searchText?: string;
   skip?: number;
 };
+
+export type TDataGetProductCategory = {
+  id: number,
+  category: string,
+  agentcode: string,
+}
 
 export type TRequestConfig = {
   headers: {
@@ -289,52 +228,24 @@ export type TParamsRegister = {
 };
 
 export type TParamsPostOrderUser = {
-  username: string;
-  receiverfirstname: string;
-  type: string;
-  receiverlastname: string;
-  receivermobile: string;
-  region: string;
-  province: string;
-  municity: string;
-  barangay: string;
-  address: string;
-  originsite: string;
-  downpayment: string;
-  totalcost: string;
+  fullname: string,
+  spouse: string,
+  address: string,
+  mobile: string,
+  description: string,
+  currentpayment: string,
+  totalcost: string,
   orders: TParamsPostOrders[];
 };
 
 export type TParamsDeleteOrderUser = {
-  orderid: string;
-};
+  transactionid: string;
+}
 
 export type TParamsPostOrders = {
-  productId: number;
+  productid: string;
   price: string;
-  quantityxxs: number;
-  quantityxs: number;
-  quantittys: number;
-  quantitym: number;
-  quantityl: number;
-  quantityxl: number;
-  quantityxxl: number;
-  quantity5: number;
-  quantity55: number;
-  quantity6: number;
-  quantity65: number;
-  quantity7: number;
-  quantity75: number;
-  quantity8: number;
-  quantity85: number;
-  quantity9: number;
-  quantity95: number;
-  quantity100: number;
-  quantity105: number;
-  quantitty110: number;
-  quantity115: number;
-  quantity120: number;
-  quantitydefault: number;
+  quantity: number,
 };
 
 export type TUserSession = {
@@ -393,28 +304,27 @@ export type TParamsGetOrderUser = {
   begin?: string;
   end?: string;
   search?: string;
-  category?: "username" | "orderid";
-  type?: string;
-  estatustype?: string;
-  skip: number;
-};
+  status?: "paid" | "notpaid";
+  category?: "transactionid" | "fullname";
+  skip?: number;
+}
 
 export type TParamsPostInstallment = {
-  orderid: string;
   amount: string;
+  transactionid: string;
+  description: string;
 };
 
 export type TParamsDeleteInstallment = {
   id: number;
-  orderid: string;
+  transactionid: string;
 };
 
 export type TParamsEditInstallment = {
-  installment?: string;
+  installment: string;
   id: number;
-  orderid: string;
-  description?: string;
-
+  transactionid: string;
+  description: string;
 };
 
 export type TParamsGenerateBarcode = {
