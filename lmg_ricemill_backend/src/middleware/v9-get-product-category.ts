@@ -42,7 +42,7 @@ const MW_v9_get_product_category = async (
       return;
     }
 
-    (req as any).agentcode = result.agentcode;
+        (req as any).agentcode = result.agentcode;
   }
 
   next();

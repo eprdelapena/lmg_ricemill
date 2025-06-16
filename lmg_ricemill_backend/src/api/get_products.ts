@@ -6,7 +6,7 @@ import {
   TGetProductsParams,
 } from "@/types/main_schema";
 import { Request, Response } from "express";
-import { and, desc, eq, like, ilike } from "drizzle-orm";
+import { and, desc, eq, ilike } from "drizzle-orm";
 import { db } from "@/config/drizzle/connectdb";
 import { product } from "@/config/drizzle/schema";
 import { ProductTable } from "@/config/drizzle/tables/table_product";
@@ -50,6 +50,7 @@ const v9_get_products = async (
     status: 200,
     data: productList.length ? productList : [],
   });
+
   return;
 };
 

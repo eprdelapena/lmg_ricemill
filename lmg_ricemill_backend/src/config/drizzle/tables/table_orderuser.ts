@@ -31,7 +31,7 @@ export const OrderUserTable = pgTable(
     scale: 2,
   }).$default(() => "0"),
   isshow: boolean("isshow").notNull().default(true),
-  transactiondate: timestamp("transactiondate").notNull(),
+  transactiondate: timestamp("transactiondate").notNull().defaultNow(),
 },
 (table) => [
   primaryKey({ columns: [table.id, table.transactionid] }),

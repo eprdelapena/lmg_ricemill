@@ -17,6 +17,36 @@ const MW_v9_post_installment = async (
   >,
   next: NextFunction,
 ): Promise<void> => {
+  const {
+    amount,
+    transactionid,
+    description
+  } = req.body;
+
+  if(!amount || isNaN(Number(amount))){
+    res.status(200).json({
+      status: 401,
+      message: "Invalid parameters"
+    });
+    return;
+  }
+
+  if(!transactionid || typeof transactionid !== "string"){
+    res.status(200).json({
+      status: 402,
+      message: "Invalid parameters"
+    });
+    return;
+  }
+
+  if(description && typeof description !== "string"){
+    res.status(200).json({
+      status: 403,
+      message: "Invalid parameters"
+    });
+    return;
+  }
+  
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -38,19 +68,8 @@ const MW_v9_post_installment = async (
       res.status(200).json(RequestStatusObject.invalidAuthorization);
       return;
     }
-  }
 
-  const { orderid, amount } = req.body;
-
-  if (
-    !amount ||
-    Number(amount) === 0 ||
-    typeof Number(amount) !== "number" ||
-    typeof orderid !== "string" ||
-    orderid.includes(" ")
-  ) {
-    res.status(200).json(RequestStatusObject.invalidField);
-    return;
+    (req as any).agentcode = result.agentcode;
   }
 
   next();

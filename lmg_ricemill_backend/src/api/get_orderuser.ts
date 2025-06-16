@@ -5,14 +5,14 @@ import {
   IParamsGetOrderUser,
 } from "@/types/main_schema";
 import { db } from "@/config/drizzle/connectdb";
-import { and, desc, eq, gte, ilike, lte } from "drizzle-orm";
+import { and, desc, eq, gte, ilike, lte , lt} from "drizzle-orm";
 import { OrderUserTable } from "@/config/drizzle/tables/table_orderuser";
 
 const v9_get_orderuser = async (
   req: Request<{}, {}, IParamsGetOrderUser>,
   res: Response<IResponseSuccess<any> | IResponseFail>,
 ): Promise<void> => {
-  const { search, begin, end, estatustype, category, skip, type } = req.body;
+  const { begin, end, search, status, category, skip } = req.body;
 
   const limit: number = 20;
   let currentPage = 1;
@@ -32,27 +32,23 @@ const v9_get_orderuser = async (
     dateEnd = new Date(end);
   }
 
-  console.log("type searched", type);
+
   const userList = await db.query.orderuser.findMany({
     where: and(
-    category === "orderid" && search
-      ? ilike(OrderUserTable.orderid, `%${search}%`)
+    category === "fullname" && search
+      ? ilike(OrderUserTable.fullname, `%${search}%`)
       : undefined,
-      category === "firstname" && search
-      ? ilike(OrderUserTable.receiverfirstname, `%${search}%`)
+      category === "transactionid" && search
+      ? eq(OrderUserTable.transactionid, search)
       : undefined,
-            category === "lastname" && search
-      ? ilike(OrderUserTable.receiverlastname, `%${search}%`)
+      status === "paid"
+      ? gte(OrderUserTable.totalcost, OrderUserTable.currentpayment)
       : undefined,
-      category === "username" && search
-        ? eq(OrderUserTable.username, search as string)
-        : undefined,
-      estatustype
-        ? eq(OrderUserTable.estatustype, estatustype as any)
-        : undefined,
-      type ? eq(OrderUserTable.type, type) : undefined,
-      dateBegin ? gte(OrderUserTable.orderdate, dateBegin) : undefined,
-      dateEnd ? lte(OrderUserTable.orderdate, dateEnd) : undefined,
+      status === "notpaid"
+        ? lt(OrderUserTable.totalcost, OrderUserTable.currentpayment)
+      : undefined,
+      dateBegin ? gte(OrderUserTable.transactiondate, dateBegin) : undefined,
+      dateEnd ? lte(OrderUserTable.transactiondate, dateEnd) : undefined,
     ),
     limit,
     offset,

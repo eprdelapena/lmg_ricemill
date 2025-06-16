@@ -19,6 +19,57 @@ const MW_v9_get_orderuser = async (
   >,
   next: NextFunction,
 ): Promise<void> => {
+  const { search, category, begin, end, skip, status} = req.body;
+
+  if(search && typeof search !== "string"){
+    res.status(200).json({
+      status: 401,
+      message: "Invalid parameter"
+    });
+    return;
+  }
+
+  if(category && typeof category !== "string"){
+    res.status(200).json({
+      status: 402,
+      message: "Invalid parameter"
+    });
+    return;
+  }
+
+  if(skip && typeof skip !== "number"){
+    res.status(200).json({
+      status: 403,
+      message: "Invalid parameter"
+    });
+    return;
+  }
+
+  if(status && typeof status !== "string"){
+    res.status(200).json({
+      status: 404,
+      message: "Invalid parameter"
+    });
+    return;
+  }
+
+  if (begin && isNaN(new Date(begin).getTime())) {
+    res.status(200).json({
+      status: 405,
+      message: "Invalid parameter"
+    });
+    return;
+  }
+
+  if (end && isNaN(new Date(end).getTime())) {
+    res.status(200).json({
+      status: 406,
+      message: "Invalid parameter"
+    });
+    return;
+  }
+
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -37,39 +88,16 @@ const MW_v9_get_orderuser = async (
     }
 
     if (
-      result.eaccounttype !== "admin" &&
-      (result as any).eaccounttype !== "admin_secretary" &&
-      (result as any).eaccounttype !== "admin_viewer" &&
-      (result as any).eaccounttype !== "admin_level_one" &&
-      (result as any).eaccounttype !== "admin_level_two" &&
-      (result as any).eaccounttype !== "admin_level_three"
+      result.eaccounttype !== "admin"
     ) {
       res.status(200).json(RequestStatusObject.invalidAuthorization);
       return;
     }
+
+    (result as any).agentcode = result.agentcode;
   }
 
-  const { search, category, begin, end, skip, estatustype } = req.body;
 
-  const isPage = skip && typeof skip !== "number";
-  const isUsernameInvalid = search && typeof search !== "string";
-  const isCategoryInvalid = category && typeof category !== "string";
-  const isBeginInvalid = begin && new Date(begin) === null;
-  const isEndInvalid = end && new Date(end) === null;
-  const isEstatusTypeInvalid =
-    estatustype && !["success", "ondelivery", "pending"].includes(estatustype);
-
-  if (
-    isPage ||
-    isUsernameInvalid ||
-    isCategoryInvalid ||
-    isBeginInvalid ||
-    isEndInvalid ||
-    isEstatusTypeInvalid
-  ) {
-    res.status(200).json(RequestStatusObject.invalidField);
-    return;
-  }
 
   next();
 };

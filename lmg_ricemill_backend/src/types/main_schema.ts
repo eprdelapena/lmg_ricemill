@@ -179,7 +179,8 @@ export type TParamsViewOrderItem = {
 
 export type TParamsPostInstallment = {
   amount: string;
-  orderid: string;
+  transactionid: string;
+  description: string;
 };
 
 export type TParamsGetInstallment = {
@@ -212,13 +213,13 @@ export type TParamsGenerateBarcode = {
 export type TParamsEditInstallment = {
   installment: string;
   id: number;
-  orderid: string;
+  transactionid: string;
   description: string;
 };
 
 export type TParamsDeleteInstallment = {
   id: number;
-  orderid: string;
+  transactionid: string;
 };
 
 export interface IParamsEditStatus {
@@ -257,10 +258,9 @@ export interface IParamsGetOrderUser {
   begin?: string;
   end?: string;
   search?: string;
-  category?: "username" | "orderid" | "firstname" | "lastname";
-  estatustype?: string;
-  skip: number;
-  type: string;
+  status?: "paid" | "notpaid";
+  category?: "transactionid" | "fullname";
+  skip?: number;
 }
 
 export interface IProductData extends IProduct {

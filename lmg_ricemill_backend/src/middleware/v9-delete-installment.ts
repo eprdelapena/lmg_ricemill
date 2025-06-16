@@ -17,6 +17,14 @@ const MW_v9_delete_installment = async (
   >,
   next: NextFunction,
 ): Promise<void> => {
+
+  const { id, transactionid } = req.body;
+
+  if (isNaN(Number(id)) || !transactionid || typeof transactionid !== "string") {
+    res.status(200).json(RequestStatusObject.invalidField);
+    return;
+  }
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -38,14 +46,10 @@ const MW_v9_delete_installment = async (
       res.status(200).json(RequestStatusObject.invalidAuthorization);
       return;
     }
+
+    (req as any).agentcode = result.agentcode;
   }
 
-  const { id, orderid } = req.body;
-
-  if (isNaN(Number(id)) || !orderid || typeof orderid !== "string") {
-    res.status(200).json(RequestStatusObject.invalidField);
-    return;
-  }
 
   next();
 };
