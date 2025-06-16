@@ -17,8 +17,11 @@ const MW_v9_delete_product = async (
   next: NextFunction,
 ): Promise<void> => {
   const { productid } = req.body;
-  if (!productid || typeof productid !== "number") {
-    res.status(200).json(RequestStatusObject.invalidField);
+  if (!productid || typeof productid !== "string") {
+    res.status(200).json({
+      status: 406,
+      message: "Invalid parameter"
+    });
     return;
   }
 
@@ -47,6 +50,8 @@ const MW_v9_delete_product = async (
       res.status(200).json(RequestStatusObject.invalidAuthorization);
       return;
     }
+
+    (req as any).agentcode = result.agentcode;
   }
 
   const productList = await db.query.product.findFirst({

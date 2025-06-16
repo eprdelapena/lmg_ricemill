@@ -4,7 +4,7 @@ import {
   TParamsGetProductCategory,
 } from "@/types/main_schema";
 import { Request, Response } from "express";
-import { desc, and, eq, order } from "drizzle-orm";
+import { desc, and, eq } from "drizzle-orm";
 import { db } from "@/config/drizzle/connectdb";
 import { ProductCategoryTable } from "@/config/drizzle/tables/table_product_category";
 

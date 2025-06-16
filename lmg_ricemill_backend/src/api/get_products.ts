@@ -24,7 +24,7 @@ const v9_get_products = async (
     currentSkip = skip;
   }
 
-  const limit: number = 9;
+  const limit: number = 30;
   const offset: number = (currentSkip - 1) * limit;
 
   const productList = await db.query.product.findMany({
@@ -32,14 +32,11 @@ const v9_get_products = async (
       searchType === ESearchTypeProducts.category
         ? eq(ProductTable.category, searchText as TCategoryProducts)
         : undefined,
-      searchType === ESearchTypeProducts.productid && !isNaN(Number(searchText))
-        ? eq(ProductTable.productid, Number(searchText))
+      searchType === ESearchTypeProducts.productid
+        ? eq(ProductTable.productid, searchText as TCategoryProducts)
         : undefined,
       searchType === ESearchTypeProducts.title
         ? ilike(product.title, `%${searchText}%`)
-        : undefined,
-      searchType === ESearchTypeProducts.searchtag
-        ? ilike(product.searchtag, `%${searchText}%`)
         : undefined,
       eq(ProductTable.isshow, true),
     ),

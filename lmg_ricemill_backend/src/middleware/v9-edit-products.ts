@@ -1,18 +1,10 @@
 import { RequestStatusObject } from "@/constant/constant_main";
 import {
-  EAccountType,
   IResponseFail,
   IResponseSuccess,
   TEditProductsParams,
   TPostProductsParams,
 } from "@/types/main_schema";
-import {
-  isEmptyError,
-  isStringDecimalError,
-  numberTypeError,
-  specialCharTypeError,
-  stringTypeError,
-} from "@/utils/main_utils";
 import { Request, Response, NextFunction } from "express";
 import { and, eq } from "drizzle-orm";
 import { users } from "@/config/drizzle/schema";
@@ -27,86 +19,47 @@ const MW_v9_edit_products = async (
     productid,
     title,
     price,
-    image,
-    imageone,
-    imagetwo,
-    imagethree,
+    quantity,
     category,
-    description,
-    searchtag,
-    quantityxxs,
-    quantityxs,
-    quantittys,
-    quantitym,
-    quantityl,
-    quantityxl,
-    quantityxxl,
-    quantity5,
-    quantity55,
-    quantity6,
-    quantity65,
-    quantity7,
-    quantity75,
-    quantity8,
-    quantity85,
-    quantity9,
-    quantity95,
-    quantity100,
-    quantity105,
-    quantitty110,
-    quantity115,
-    quantity120,
-    quantitydefault,
   } = req.body;
 
-  const requiredParameters = [productid];
-  const stringDecimalParameters = [price];
-  const stringParameters = [
-    title,
-    price,
-    category,
-    price,
-    image,
-    searchtag,
-    description,
-    imageone,
-    imagetwo,
-    imagethree,
-  ];
-  const numberParameters = [
-    productid,
-    quantityxxs,
-    quantityxs,
-    quantittys,
-    quantitym,
-    quantityl,
-    quantityxl,
-    quantityxxl,
-    quantity5,
-    quantity55,
-    quantity6,
-    quantity65,
-    quantity7,
-    quantity75,
-    quantity8,
-    quantity85,
-    quantity9,
-    quantity95,
-    quantity100,
-    quantity105,
-    quantitty110,
-    quantity115,
-    quantity120,
-    quantitydefault,
-  ];
+  if(!productid || typeof productid !== 'string'){
+    res.status(200).json({
+      status: 406,
+      message: "Invalid parameter"
+    });
+    return;
+  }
 
-  const isEmpty = isEmptyError(requiredParameters);
-  const isStringDecimalNaN = isStringDecimalError(stringDecimalParameters);
-  const isStringError = stringTypeError(stringParameters);
-  const isNumberError = numberTypeError(numberParameters);
+  if(title && typeof title !== 'string'){
+    res.status(200).json({
+      status: 407,
+      message: "Invalid parameter"
+    });
+    return;
+  }
 
-  if (isEmpty || isStringDecimalNaN || isStringError || isNumberError) {
-    res.status(200).json(RequestStatusObject.invalidField);
+  if(quantity && isNaN(Number(quantity))){
+    res.status(200).json({
+      status: 408,
+      message: "Invalid parameter"
+    });
+    return;
+  }
+
+  if(price && isNaN(Number(price))){
+    res.status(200).json({
+      status: 409,
+      message: "Invalid parameter"
+    });
+    return;
+  }
+
+  if(category && typeof category !== 'string'){
+    res.status(200).json({
+      status: 410,
+      message: "Invalid parameter"
+    });
     return;
   }
 
@@ -123,14 +76,17 @@ const MW_v9_edit_products = async (
     }
 
     if (
-      result.eaccounttype !== "admin" &&
-      (result as any).eaccounttype !== "admin_secretary" &&
-      (result as any).eaccounttype !== "admin_level_three" &&
-      (result as any).eaccounttype !== "admin_level_two"
+      result.eaccounttype !== "admin" 
+      // (result as any).eaccounttype !== "admin_secretary" &&
+      // (result as any).eaccounttype !== "admin_level_three" &&
+      // (result as any).eaccounttype !== "admin_level_two"
     ) {
       res.status(200).json(RequestStatusObject.invalidAuthorization);
       return;
     }
+
+    (req as any).agentcode = result.agentcode;
+
   } else {
     res.status(200).json(RequestStatusObject.invalidAuthorization);
     return;

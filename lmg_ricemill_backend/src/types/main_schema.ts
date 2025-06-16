@@ -53,7 +53,7 @@ export interface ILogin {
 }
 
 export type TDeleteProductParams = {
-  productid: number;
+  productid: string;
 };
 
 export interface ILoginResponse {
@@ -408,40 +408,11 @@ export type TGetProductsParams = {
 };
 
 export type TEditProductsParams = {
-  productid: number;
+  productid: string;
   title: string;
-  price: string;
-  cost: string;
-  image: string;
-  imageone: string;
-  imagetwo: string;
-  imagethree: string;
   category: string;
-  description: string;
-  searchtag: string[];
-  quantityxxs: number;
-  quantityxs: number;
-  quantittys: number;
-  quantitym: number;
-  quantityl: number;
-  quantityxl: number;
-  quantityxxl: number;
-  quantity5: number;
-  quantity55: number;
-  quantity6: number;
-  quantity65: number;
-  quantity7: number;
-  quantity75: number;
-  quantity8: number;
-  quantity85: number;
-  quantity9: number;
-  quantity95: number;
-  quantity100: number;
-  quantity105: number;
-  quantitty110: number;
-  quantity115: number;
-  quantity120: number;
-  quantitydefault: number;
+  price: string;
+  quantity: number;
 };
 
 export type TParamsGetReplenishment = {

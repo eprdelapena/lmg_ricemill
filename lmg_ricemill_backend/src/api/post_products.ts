@@ -36,8 +36,6 @@ const v9_post_products = async (
     productid
   };
 
-
-
   await db.insert(product).values(newValues);
   res.status(200).json(RequestStatusObject.success);
   return;
