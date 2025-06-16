@@ -72,6 +72,11 @@ import v9_download_ordertable from "@/api/download_ordertable";
 import v9_download_orderusertable from "@/api/download_orderusertable";
 import v9_download_producttable from "@/api/download_producttable";
 import v9_download_installmenttable from "@/api/download_installmenttable";
+import v9_get_product_category from "@/api/get_product_category";
+import MW_v9_post_product_category from "@/middleware/v9-post-product-category";
+import v9_post_product_category from "@/api/post_product_category";
+import MW_v9_delete_product_category from "@/middleware/v9-delete-product-category";
+import v9_delete_product_category from "@/api/delete_product_category";
 
 const router = express.Router();
 
@@ -221,6 +226,25 @@ router.post(
   MW_v9_get_pendingorders,
   v9_get_pending_orders
 )
+
+router.post(
+  "/v9/get/productcategory",
+  MW_v9_get_products,
+  v9_get_product_category
+)
+
+router.post(
+  "/v9/post/productcategory",
+  MW_v9_post_product_category,
+  v9_post_product_category
+)
+
+router.post(
+  "/v9/delete/productcategory",
+  MW_v9_delete_product_category,
+  v9_delete_product_category
+)
+
 
 router.get("/v9/download/ordertable", MW_v9_download_ordertable, v9_download_ordertable);
 

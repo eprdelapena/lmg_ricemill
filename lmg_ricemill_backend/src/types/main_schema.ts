@@ -6,6 +6,18 @@ export interface IResponseSuccess<T> {
   message?: string;
 }
 
+export type TParamsPostProductCategory = {
+  category: string, 
+}
+
+export type TParamsDeleteProductCategory = {
+  id: number,
+}
+
+export type TParamsGetProductCategory = {
+  
+}
+
 export type TCategoryProducts =
   | "bags"
   | "shoes"
@@ -501,36 +513,7 @@ export type TParamsPostReplenishment = {
 
 export type TPostProductsParams = {
   title: string;
-  price: string;
-  cost: string;
-  image: string;
-  imageone: string;
-  imagetwo: string;
-  imagethree: string;
   category: string;
-  description: string;
-  searchtag: string[];
-  quantityxxs: number;
-  quantityxs: number;
-  quantittys: number;
-  quantitym: number;
-  quantityl: number;
-  quantityxl: number;
-  quantityxxl: number;
-  quantity5: number;
-  quantity55: number;
-  quantity6: number;
-  quantity65: number;
-  quantity7: number;
-  quantity75: number;
-  quantity8: number;
-  quantity85: number;
-  quantity9: number;
-  quantity95: number;
-  quantity100: number;
-  quantity105: number;
-  quantitty110: number;
-  quantity115: number;
-  quantity120: number;
-  quantitydefault: number;
+  price: string;
+  quantity: number;
 };

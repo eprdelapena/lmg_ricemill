@@ -4,6 +4,7 @@ import { LogTable } from "./tables/table_itemlogs";
 import { OrderTable } from "./tables/table_order";
 import { OrderUserTable } from "./tables/table_orderuser";
 import { ProductTable } from "./tables/table_product";
+import { ProductCategoryTable } from "./tables/table_product_category";
 import { ReplenishmentTable } from "./tables/table_replenishment";
 import { UserTable } from "./tables/table_user";
 import { pgEnum } from "drizzle-orm/pg-core";
@@ -18,14 +19,6 @@ export const EAccountType = pgEnum("eaccounttype", [
   "admin_level_three",
 ]);
 
-export const ECategoryType = pgEnum("ecategorytype", [
-  "bags",
-  "shoes",
-  "clothes",
-  "jewelry",
-  "watches",
-  "others",
-]);
 
 export const EStatusEnum = pgEnum("estatustype", [
   "pending",
@@ -47,3 +40,4 @@ export const expense = ExpenseTable;
 export const installment = InstallmentTable;
 export const replenishment = ReplenishmentTable;
 export const itemlog = LogTable
+export const productcategory = ProductCategoryTable;

@@ -22,10 +22,8 @@ export const EAccountType = pgEnum("eaccounttype", [
 
 export const UserTable = pgTable("usertable", {
   id: serial("id").primaryKey().notNull(),
-  userid: serial("userid").unique().notNull(),
-  firstname: varchar("firstname", { length: 255 }).notNull(),
-  middlename: varchar("middlename", { length: 255 }).notNull(),
-  lastname: varchar("lastname", { length: 255 }).notNull(),
+  fullname: varchar("lastname", { length: 255 }).notNull(),
+  agentcode: varchar("agentcode", { length: 255 }).notNull(),
   username: varchar("username", { length: 255 }).notNull().unique(),
   password: varchar("password", { length: 255 }).notNull(),
   salt: char("salt", { length: 5 }).notNull().default(""),
