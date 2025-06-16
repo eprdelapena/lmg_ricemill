@@ -18,6 +18,44 @@ const MW_v9_post_orderuser = async (
   >,
   next: NextFunction,
 ): Promise<void> => {
+  const {
+    fullname,
+    spouse,
+    address,
+    mobile,
+    description,
+    currentpayment,
+    totalcost,
+  } = req.body;
+
+  if(!fullname typeof fullname !== "string"){
+
+  }
+
+  if(spouse typeof spouse !== "string"){
+
+  }
+
+  if(address typeof address !== "string"){
+    
+  }
+
+  if(mobile typeof mobile !== "string"){
+    
+  }
+
+  if(description typeof description !== "string"){
+    
+  }
+
+  if(currentpayment isNaN(Number(currentpayment))){
+    
+  }
+
+  if(totalcost isNaN(Number(totalcost))){
+    
+  }
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -36,87 +74,15 @@ const MW_v9_post_orderuser = async (
     }
 
     if (
-      result.eaccounttype !== "admin" &&
-      (result as any).eaccounttype !== "admin_secretary" &&
-      (result as any).eaccounttype !== "admin_viewer" &&
-      (result as any).eaccounttype !== "admin_level_one" &&
-      (result as any).eaccounttype !== "admin_level_two" &&
-      (result as any).eaccounttype !== "admin_level_three"
+      result.eaccounttype !== "admin" 
+
     ) {
       res.status(200).json(RequestStatusObject.invalidAuthorization);
       return;
     }
+
+    (req as any).agentcode = result.agentcode;
   }
-
-  const {
-    username,
-    receiverfirstname,
-    receiverlastname,
-    receivermobile,
-    region,
-    province,
-    municity,
-    barangay,
-    address,
-    originsite,
-    downpayment,
-    totalcost,
-    orders,
-  } = req.body;
-
-  const isUsernameInvalid =
-    !username ||
-    username.length === 0 ||
-    typeof username !== "string" ||
-    /[^a-zA-Z0-9]/.test(username);
-  const isReceiverFirstNameInvalid =
-    !receiverfirstname ||
-    receiverfirstname.length === 0 ||
-    typeof receiverfirstname !== "string";
-  const isReceiverLastNameInvalid =
-    !receiverlastname ||
-    receiverlastname.length === 0 ||
-    typeof receiverlastname !== "string";
-  const isReceiverMobileInvalid =
-    !receivermobile ||
-    receivermobile.length < 6 ||
-    typeof receivermobile !== "string" ||
-    !/^09\d{9}$/.test(receivermobile);
-  const isRegionInvalid =
-    !region || region.length === 0 || typeof region !== "string";
-  const isMunicityInvalid =
-    !municity || municity.length === 0 || typeof municity !== "string";
-  const isProvinceInvalid =
-    !province || province.length === 0 || typeof province !== "string";
-  const isBarangayInvalid =
-    !barangay || barangay.length === 0 || typeof barangay !== "string";
-  const isAddressInvalid =
-    !address || address.length === 0 || typeof address !== "string";
-  const isOriginSite =
-    !originsite || originsite.length === 0 || typeof originsite !== "string";
-  const isDownpaymentInvalid = Number(downpayment).toLocaleString() === "NaN";
-  const isTotalCostInvalid = Number(totalcost).toLocaleString() === "NaN";
-  // const isOrdersInvalid = orders && orders?.length && orders.length === 0
-
-  if (
-    isUsernameInvalid ||
-    isReceiverFirstNameInvalid ||
-    isReceiverLastNameInvalid ||
-    isReceiverMobileInvalid ||
-    isRegionInvalid ||
-    isMunicityInvalid ||
-    isBarangayInvalid ||
-    isProvinceInvalid ||
-    isAddressInvalid ||
-    isOriginSite ||
-    isDownpaymentInvalid ||
-    isTotalCostInvalid
-    // isOrdersInvalid
-  ) {
-    res.status(200).json(RequestStatusObject.invalidField);
-    return;
-  }
-
   next();
 };
 

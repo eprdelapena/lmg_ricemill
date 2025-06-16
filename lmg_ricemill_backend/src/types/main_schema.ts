@@ -227,7 +227,7 @@ export interface IParamsEditStatus {
 }
 
 export interface IParamsDeleteOrderUser {
-  orderid: string;
+  transactionid: string;
 }
 
 export type TParamsDeleteLogTable = {
@@ -357,47 +357,17 @@ export type TParamsPostExpense = {
 };
 
 export type TPostOrderUserParams = {
-  username: string;
-  receiverfirstname: string;
-  receiverlastname: string;
-  receivermobile: string;
-  region: string;
-  province: string;
-  type: string;
-  municity: string;
-  barangay: string;
-  address: string;
-  originsite: string;
-  downpayment: number;
-  totalcost: number;
-  orderdate: Date;
+  fullname: string,
+  spouse: string,
+  address: string,
+  mobile: string,
+  description: string,
+  currentpayment: string,
+  totalcost: string,
   orders: {
-    productId: number;
+    productid: string;
     price: string;
-    // cost: string,
-    quantityxxs: number;
-    quantityxs: number;
-    quantittys: number;
-    quantitym: number;
-    quantityl: number;
-    quantityxl: number;
-    quantityxxl: number;
-    quantity5: number;
-    quantity55: number;
-    quantity6: number;
-    quantity65: number;
-    quantity7: number;
-    quantity75: number;
-    quantity8: number;
-    quantity85: number;
-    quantity9: number;
-    quantity95: number;
-    quantity100: number;
-    quantity105: number;
-    quantitty110: number;
-    quantity115: number;
-    quantity120: number;
-    quantitydefault: number;
+    quantity: number,
   }[];
 };
 

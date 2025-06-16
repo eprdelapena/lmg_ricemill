@@ -4,46 +4,25 @@ import {
   varchar,
   serial,
   timestamp,
+  primaryKey,
+  text,
   numeric,
+  boolean,
   pgEnum,
 } from "drizzle-orm/pg-core";
 
-export const EStatusEnum = pgEnum("estatustype", [
-  "pending",
-  "ondelivery",
-  "success",
-]);
-
-export const EOriginSite = pgEnum("eoriginsite", [
-  "facebook",
-  "shoppee",
-  "chicberry",
-]);
-
-export const OrderUserTable = pgTable("orderusertable", {
+export const OrderUserTable = pgTable(
+  "orderusertable", 
+  {
   id: serial("id").primaryKey().notNull(),
-  orderid: varchar("orderid", { length: 255 }).notNull(),
-  username: varchar("username", { length: 255 }).$default(() => {
-    return "";
-  }),
-  type: varchar("type", { length: 255 }).$default(() => {
-    return "on_hand_layaway";
-  }),
-  receiverfirstname: varchar("receiverfirstname", { length: 255 }),
-  receiverlastname: varchar("receiverlastname", { length: 255 }),
-  receivermobile: varchar("receivermobile", { length: 11 }),
-  region: varchar("region", { length: 255 }),
-  province: varchar("province", { length: 255 }),
-  municity: varchar("municity", { length: 255 }),
-  barangay: varchar("barangay", { length: 255 }),
-  address: varchar("address", { length: 255 }),
-  estatustype: EStatusEnum("estatustype").$default(() => {
-    return "pending";
-  }),
-  originsite: EOriginSite("eoriginsite").$default(() => {
-    return "chicberry";
-  }),
-  cuurentpayment: numeric("currentpayment", {
+  transactionid: varchar("transactionid", { length: 255 }).notNull(),
+  fullname: varchar("fullname", { length: 255 }).notNull().default(''),
+  agentcode: varchar("agentcode", { length: 255 }).notNull().default(''),
+  spouse: varchar("spouse", { length: 255 }).notNull().default(''),
+  address: varchar("address", { length: 255 }).notNull().default(''),
+  mobile: varchar("mobile", { length: 255 }).notNull().default(''),
+  description: text("description").notNull().default(''),
+  currentpayment: numeric("currentpayment", {
     precision: 10,
     scale: 2,
   }).$default(() => "0"),
@@ -51,5 +30,11 @@ export const OrderUserTable = pgTable("orderusertable", {
     precision: 10,
     scale: 2,
   }).$default(() => "0"),
-  orderdate: timestamp("orderdate").notNull(),
-});
+  isshow: boolean("isshow").notNull().default(true),
+  transactiondate: timestamp("transactiondate").notNull(),
+},
+(table) => [
+  primaryKey({ columns: [table.id, table.transactionid] }),
+]
+
+);
