@@ -19,7 +19,7 @@ const v9_post_products = async (
     category,
     quantity
   } = req.body;
-
+  
   const regdate = new Date().toLocaleString("en-US", {
     timeZone: "Asia/Manila",
   });
@@ -30,7 +30,7 @@ const v9_post_products = async (
     quantity: quantity!,
     category: category?.toLocaleUpperCase()!,
     price: price!,
-    title: title!,
+    title: title!?.toLocaleUpperCase() || '',
     agentcode: (req as any).agentcode,
     regdate: regDateObj,
     productid

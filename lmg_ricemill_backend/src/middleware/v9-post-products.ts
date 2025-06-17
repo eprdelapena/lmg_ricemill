@@ -77,6 +77,8 @@ const MW_v9_post_products = async (
       res.status(200).json(RequestStatusObject.invalidAuthorization);
       return;
     }
+
+    (req as any).agentcode = result.agentcode;
   }
 
   next();

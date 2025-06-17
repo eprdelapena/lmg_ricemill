@@ -11,6 +11,7 @@ import Swal from "sweetalert2"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import useV1GetProductCategory from "@/hooks/api_hooks/use_get_productcategory"
 
 const ProductTable = (props: { userData: TUserSession }) => {
   const [initialPayload, setInitialPayload] = useState<Omit<TParamsGetProducts, "skip">>({
@@ -23,7 +24,7 @@ const ProductTable = (props: { userData: TUserSession }) => {
   const pageSize = 5
 
   const { currentPage, setCurrentPage, getV1GetProduct, payload, productList, setPayload } = useV1GetProduct()
-
+  const {getProductCategory, categories, setCategories} = useV1GetProductCategory();
   const { getV1DeleteProduct } = useV1DeleteProduct()
 
   const handleNext = () => {
@@ -52,7 +53,10 @@ const ProductTable = (props: { userData: TUserSession }) => {
       })
 
       try {
-        await getV1GetProduct()
+        await Promise.all([
+          getV1GetProduct(),
+          getProductCategory()
+        ])
       } finally {
         Swal.close()
       }
@@ -76,6 +80,8 @@ const ProductTable = (props: { userData: TUserSession }) => {
                 initialPayload={initialPayload}
                 setInitialPayload={setInitialPayload}
                 setPayload={setPayload}
+                categoryList={categories}
+                getProductCategory={getProductCategory}
               />
 
               <div className="rounded-lg border bg-white">

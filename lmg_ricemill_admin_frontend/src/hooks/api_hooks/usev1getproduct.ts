@@ -19,7 +19,7 @@ const useV1GetProduct = () => {
     });
 
     if (response.status !== EAPIStatusCodes.success) {
-      await signOut();
+      // await signOut();
       return;
     }
 

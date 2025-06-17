@@ -1,1 +1,0 @@
-ALTER TABLE "orderusertable" DROP COLUMN "downpayment";

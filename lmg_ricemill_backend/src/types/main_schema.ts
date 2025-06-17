@@ -93,9 +93,8 @@ export type TAdminClassification =
   | "admin_level_two"
   | "admin_level_three";
 export interface IRegister {
-  firstname: string;
-  lastname: string;
-  middlename: string;
+  fullname: string;
+  agentcode: string;
   mobile: string;
   email: string;
   estatustype: TAdminClassification;

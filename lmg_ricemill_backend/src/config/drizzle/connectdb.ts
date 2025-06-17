@@ -5,7 +5,7 @@ import postgres from "postgres";
 const localDatabaseConnection =
   process.env.CONNECTION_STRING ||
   // "postgresql://dbchicberry_owner:npg_ru4Hexnwmp0U@ep-sparkling-darkness-a1lnfbf1-pooler.ap-southeast-1.aws.neon.tech/dbchicberry?sslmode=require"
- "postgres://admin:password@localhost:5434/dbchicberry";
+  "postgres://admin:password@localhost:5436/admin"
   // "postgres://admin:password@192.168.254.109:5434/dbchicberry";
 const client = postgres(localDatabaseConnection as string);
 

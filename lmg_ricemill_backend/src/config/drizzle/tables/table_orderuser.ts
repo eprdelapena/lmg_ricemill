@@ -8,13 +8,14 @@ import {
   text,
   numeric,
   boolean,
+  unique,
   pgEnum,
 } from "drizzle-orm/pg-core";
 
 export const OrderUserTable = pgTable(
   "orderusertable", 
   {
-  id: serial("id").primaryKey().notNull(),
+  id: serial("id").notNull(),
   transactionid: varchar("transactionid", { length: 255 }).notNull(),
   fullname: varchar("fullname", { length: 255 }).notNull().default(''),
   agentcode: varchar("agentcode", { length: 255 }).notNull().default(''),
@@ -35,6 +36,7 @@ export const OrderUserTable = pgTable(
 },
 (table) => [
   primaryKey({ columns: [table.id, table.transactionid] }),
+  unique("unique_transactionid").on(table.transactionid),
 ]
 
 );

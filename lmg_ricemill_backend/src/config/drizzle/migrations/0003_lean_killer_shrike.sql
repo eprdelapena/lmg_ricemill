@@ -1,1 +1,0 @@
-ALTER TABLE "producttable" ADD COLUMN "expected" numeric(10, 2) DEFAULT '0.00' NOT NULL;

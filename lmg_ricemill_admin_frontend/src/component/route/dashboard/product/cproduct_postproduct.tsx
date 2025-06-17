@@ -14,8 +14,9 @@ import { X, Package, Upload, DollarSign, Tag, ImageIcon, Save, Sparkles } from "
 const CPostProductModal = (props: {
   setPostModal: (value: React.SetStateAction<boolean>) => void
   getV1GetProduct: () => Promise<void>
+  categoryList: { id: number, category: string, agentcode: string }[]
 }) => {
-  const { setPostModal, getV1GetProduct } = props
+  const { setPostModal, getV1GetProduct, categoryList } = props
   const { getV1PostProduct, payload, setPayload } = useV1PostProduct()
 
   return ReactDOM.createPortal(
@@ -67,12 +68,11 @@ const CPostProductModal = (props: {
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="bags">👜 Bags</SelectItem>
-                  <SelectItem value="shoes">👟 Shoes</SelectItem>
-                  <SelectItem value="clothes">👕 Clothes</SelectItem>
-                  <SelectItem value="jewelry">💎 Jewelry</SelectItem>
-                  <SelectItem value="watches">⌚ Watches</SelectItem>
-                  <SelectItem value="others">📦 Others</SelectItem>
+                  {
+                    categoryList.map((item, index) =>
+                      <SelectItem value={item.category} key={index}>{item.category}</SelectItem>
+                    )
+                  }
                 </SelectContent>
               </Select>
             </div>
@@ -96,68 +96,13 @@ const CPostProductModal = (props: {
               />
             </div>
 
-            {/* Image Upload */}
-            <div className="space-y-3">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                <ImageIcon className="h-4 w-4 text-green-500" />
-                Product Image
-              </label>
-              <div className="relative border-2 border-dashed border-gray-300 rounded-xl p-6 bg-gradient-to-br from-gray-50 to-blue-50/30 hover:border-blue-400 transition-all duration-200">
-                <div className="text-center">
-                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                  <div className="text-sm text-gray-600 mb-3">
-                    <span className="font-medium">Click to upload</span> or drag and drop
-                  </div>
-                  <Badge variant="secondary" className="text-xs">
-                    PNG, JPG, WEBP up to 10MB
-                  </Badge>
-                </div>
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.webp"
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0]
-                    const result = await changeImage(file)
-                    setPayload((prev) => ({
-                      ...prev,
-                      image: result,
-                    }))
-                    console.log("result result", result)
-                  }}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer rounded-xl"
-                />
-              </div>
-            </div>
 
             {/* Pricing Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Buying Price */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                  <DollarSign className="h-4 w-4 text-red-500" />
-                  Buying Price
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
-                    ₱
-                  </span>
-                  <Input
-                    type="number"
-                    placeholder="0.00"
-                    value={payload.cost}
-                    onChange={(e) => {
-                      setPayload((prev) => ({
-                        ...prev,
-                        cost: e.target.value,
-                      }))
-                    }}
-                    className="border-2 border-gray-200 focus:border-red-400 bg-red-50/30 shadow-sm h-12 text-base pl-8"
-                  />
-                </div>
-              </div>
 
               {/* Selling Price */}
-              <div className="space-y-2">
+              <div className="space-y-2 ">
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                   <DollarSign className="h-4 w-4 text-green-500" />
                   Selling Price
@@ -182,23 +127,7 @@ const CPostProductModal = (props: {
               </div>
             </div>
 
-            {/* Profit Preview */}
-            {payload.cost && payload.price && (
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-200">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Expected Profit per Item:</span>
-                  <Badge
-                    className={`text-base font-bold ${
-                      Number(payload.price) - Number(payload.cost) > 0
-                        ? "bg-green-500 text-white"
-                        : "bg-red-500 text-white"
-                    }`}
-                  >
-                    ₱{(Number(payload.price) - Number(payload.cost)).toLocaleString()}
-                  </Badge>
-                </div>
-              </div>
-            )}
+
           </form>
         </div>
 

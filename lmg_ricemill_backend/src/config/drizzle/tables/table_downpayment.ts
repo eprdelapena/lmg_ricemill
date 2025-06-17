@@ -12,7 +12,7 @@ import { OrderUserTable } from "./table_orderuser";
 export const InstallmentTable = pgTable(
   "installmenttable", 
   {
-  id: serial("id").primaryKey().notNull(),
+  id: serial("id").notNull(),
   transactionid: varchar("transactionid", { length: 255 }).notNull().references(() => OrderUserTable.transactionid),
   agentcode: varchar("agentcode", { length: 255 }).notNull(),
   installment: numeric("installment", {

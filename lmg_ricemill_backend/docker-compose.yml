@@ -1,29 +1,38 @@
+version: "3.9"
+
 services:
   postgres:
     image: postgres
-    container_name: onlineshop_container
+    container_name: ricemill_postgres
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: dbchicberry
+      POSTGRES_DB: admin
     ports:
-      - "5434:5432"
+      - "5436:5432"
     volumes:
-      - backendsheena_onlineshop_local_data:/var/lib/postgresql/data
+      - ricemill_postgres_data:/var/lib/postgresql/data
+
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin_container
+    container_name: ricemill_pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: 12345
     ports:
-      - "5051:80"
+      - "5052:80"
     depends_on:
       - postgres
+    volumes:
+      - ricemill_pgadmin_data:/var/lib/pgadmin
 
 volumes:
-  backendsheena_onlineshop_local_data:
+  ricemill_postgres_data:
     external: true
+  ricemill_pgadmin_data:
+    external: true
+
+
 #if port in use run this command
 # sudo lsof -iTCP -sTCP:LISTEN -n -P
 

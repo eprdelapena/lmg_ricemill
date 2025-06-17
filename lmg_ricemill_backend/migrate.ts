@@ -3,7 +3,7 @@ import { migrate } from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
 
 const migrationClient = postgres(
-   "postgres://admin:password@localhost:5434/dbchicberry",
+  "postgres://admin:password@localhost:5436/admin",
   // "postgres://admin:password@192.168.254.109:5434/dbchicberry",
   {
     max: 1,

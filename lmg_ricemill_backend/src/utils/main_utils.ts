@@ -13,7 +13,7 @@ export const hashSha256 = (data: string): string => {
   return sha256.update(data).digest("hex");
 };
 
-export const generateId = () => Math.random().toString(36).substring(2, 15);
+export const generateId = () => Math.random().toString(36).substring(2, 8);
 
 export const makePasswordHash = (salt: string, password: string) => {
   return hashSha256(`${salt}${password}p2h`);

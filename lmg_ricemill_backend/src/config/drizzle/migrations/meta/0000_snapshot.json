@@ -1,9 +1,219 @@
 {
-  "id": "8398ba4f-53d7-4fb1-90d7-ca8f02bda735",
+  "id": "a2655d2d-67b5-4b85-922a-82206e17e334",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.expensetable": {
+      "name": "expensetable",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "expenseid": {
+          "name": "expenseid",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expense": {
+          "name": "expense",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expensedate": {
+          "name": "expensedate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "memo": {
+          "name": "memo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.installmenttable": {
+      "name": "installmenttable",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transactionid": {
+          "name": "transactionid",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "agentcode": {
+          "name": "agentcode",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "installment": {
+          "name": "installment",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isshow": {
+          "name": "isshow",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "installmentdate": {
+          "name": "installmentdate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "installmenttable_transactionid_orderusertable_transactionid_fk": {
+          "name": "installmenttable_transactionid_orderusertable_transactionid_fk",
+          "tableFrom": "installmenttable",
+          "tableTo": "orderusertable",
+          "columnsFrom": [
+            "transactionid"
+          ],
+          "columnsTo": [
+            "transactionid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "installmenttable_id_transactionid_pk": {
+          "name": "installmenttable_id_transactionid_pk",
+          "columns": [
+            "id",
+            "transactionid"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.logtable": {
+      "name": "logtable",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "productid": {
+          "name": "productid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "itemid": {
+          "name": "itemid",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price": {
+          "name": "price",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0.00'"
+        },
+        "cost": {
+          "name": "cost",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0.00'"
+        },
+        "size": {
+          "name": "size",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mode": {
+          "name": "mode",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "orderid": {
+          "name": "orderid",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "logdate": {
+          "name": "logdate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.ordertable": {
       "name": "ordertable",
       "schema": "",
@@ -14,23 +224,23 @@
           "primaryKey": true,
           "notNull": true
         },
-        "orderid": {
-          "name": "orderid",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "productid": {
           "name": "productid",
-          "type": "integer",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "username": {
-          "name": "username",
+        "transactionid": {
+          "name": "transactionid",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "agentcode": {
+          "name": "agentcode",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
         },
         "price": {
           "name": "price",
@@ -38,165 +248,56 @@
           "primaryKey": false,
           "notNull": true
         },
-        "cost": {
-          "name": "cost",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "orderquantity": {
-          "name": "orderquantity",
+        "quantity": {
+          "name": "quantity",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "orderdate": {
-          "name": "orderdate",
+        "isshow": {
+          "name": "isshow",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "transactiondate": {
+          "name": "transactiondate",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
-        },
-        "quantityxxs": {
-          "name": "quantityxxs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantityxs": {
-          "name": "quantityxs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantitys": {
-          "name": "quantitys",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantitym": {
-          "name": "quantitym",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantityl": {
-          "name": "quantityl",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantityxl": {
-          "name": "quantityxl",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantityxxl": {
-          "name": "quantityxxl",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity5": {
-          "name": "quantity5",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity55": {
-          "name": "quantity55",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity6": {
-          "name": "quantity6",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity65": {
-          "name": "quantity65",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity7": {
-          "name": "quantity7",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity75": {
-          "name": "quantity75",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity8": {
-          "name": "quantity8",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity85": {
-          "name": "quantity85",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity9": {
-          "name": "quantity9",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity95": {
-          "name": "quantity95",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity100": {
-          "name": "quantity100",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity105": {
-          "name": "quantity105",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity110": {
-          "name": "quantity110",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity115": {
-          "name": "quantity115",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantity120": {
-          "name": "quantity120",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quantitydefault": {
-          "name": "quantitydefault",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "ordertable_productid_producttable_productid_fk": {
+          "name": "ordertable_productid_producttable_productid_fk",
+          "tableFrom": "ordertable",
+          "tableTo": "producttable",
+          "columnsFrom": [
+            "productid"
+          ],
+          "columnsTo": [
+            "productid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ordertable_transactionid_orderusertable_transactionid_fk": {
+          "name": "ordertable_transactionid_orderusertable_transactionid_fk",
+          "tableFrom": "ordertable",
+          "tableTo": "orderusertable",
+          "columnsFrom": [
+            "transactionid"
+          ],
+          "columnsTo": [
+            "transactionid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -210,79 +311,59 @@
         "id": {
           "name": "id",
           "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "orderid": {
-          "name": "orderid",
-          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "username": {
-          "name": "username",
+        "transactionid": {
+          "name": "transactionid",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "receiverfirstname": {
-          "name": "receiverfirstname",
+        "fullname": {
+          "name": "fullname",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "''"
         },
-        "receiverlastname": {
-          "name": "receiverlastname",
+        "agentcode": {
+          "name": "agentcode",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "''"
         },
-        "receivermobile": {
-          "name": "receivermobile",
-          "type": "varchar(11)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "region": {
-          "name": "region",
+        "spouse": {
+          "name": "spouse",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
-        },
-        "municity": {
-          "name": "municity",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "barangay": {
-          "name": "barangay",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "''"
         },
         "address": {
           "name": "address",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "''"
         },
-        "estatustype": {
-          "name": "estatustype",
-          "type": "estatustype",
-          "typeSchema": "public",
+        "mobile": {
+          "name": "mobile",
+          "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "''"
         },
-        "eoriginsite": {
-          "name": "eoriginsite",
-          "type": "eoriginsite",
-          "typeSchema": "public",
+        "description": {
+          "name": "description",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "''"
         },
-        "downpayment": {
-          "name": "downpayment",
+        "currentpayment": {
+          "name": "currentpayment",
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
@@ -293,17 +374,41 @@
           "primaryKey": false,
           "notNull": false
         },
-        "orderdate": {
-          "name": "orderdate",
+        "isshow": {
+          "name": "isshow",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "transactiondate": {
+          "name": "transactiondate",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "compositePrimaryKeys": {
+        "orderusertable_id_transactionid_pk": {
+          "name": "orderusertable_id_transactionid_pk",
+          "columns": [
+            "id",
+            "transactionid"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "unique_transactionid": {
+          "name": "unique_transactionid",
+          "nullsNotDistinct": false,
+          "columns": [
+            "transactionid"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -315,12 +420,18 @@
         "id": {
           "name": "id",
           "type": "serial",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
         },
         "productid": {
           "name": "productid",
-          "type": "serial",
+          "type": "varchar(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "agentcode": {
+          "name": "agentcode",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
@@ -336,73 +447,142 @@
           "primaryKey": false,
           "notNull": true
         },
-        "cost": {
-          "name": "cost",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "image": {
-          "name": "image",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "imageone": {
-          "name": "imageone",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "imagetwo": {
-          "name": "imagetwo",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "imagethree": {
-          "name": "imagethree",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "ecategorytype": {
-          "name": "ecategorytype",
-          "type": "ecategorytype",
-          "typeSchema": "public",
+        "isshow": {
+          "name": "isshow",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true,
-          "default": "'others'"
+          "default": true
         },
-        "description": {
-          "name": "description",
-          "type": "text",
+        "category": {
+          "name": "category",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "regdate": {
+          "name": "regdate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "producttable_agentcode_usertable_agentcode_fk": {
+          "name": "producttable_agentcode_usertable_agentcode_fk",
+          "tableFrom": "producttable",
+          "tableTo": "usertable",
+          "columnsFrom": [
+            "agentcode"
+          ],
+          "columnsTo": [
+            "agentcode"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "producttable_id_productid_pk": {
+          "name": "producttable_id_productid_pk",
+          "columns": [
+            "id",
+            "productid"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "unique_productid": {
+          "name": "unique_productid",
+          "nullsNotDistinct": false,
+          "columns": [
+            "productid"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.productcategorytable": {
+      "name": "productcategorytable",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "agentcode": {
+          "name": "agentcode",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "productcategorytable_agentcode_usertable_agentcode_fk": {
+          "name": "productcategorytable_agentcode_usertable_agentcode_fk",
+          "tableFrom": "productcategorytable",
+          "tableTo": "usertable",
+          "columnsFrom": [
+            "agentcode"
+          ],
+          "columnsTo": [
+            "agentcode"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.replenishmenttable": {
+      "name": "replenishmenttable",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "expenseid": {
+          "name": "expenseid",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "productid": {
+          "name": "productid",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expense": {
+          "name": "expense",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
-        },
-        "searchtag": {
-          "name": "searchtag",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "orders": {
-          "name": "orders",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "successorders": {
-          "name": "successorders",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "pendingorders": {
-          "name": "pendingorders",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
         },
         "quantityxxs": {
           "name": "quantityxxs",
@@ -542,21 +722,24 @@
           "primaryKey": false,
           "notNull": true
         },
-        "regdate": {
-          "name": "regdate",
+        "expensedate": {
+          "name": "expensedate",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "producttable_productid_unique": {
-          "name": "producttable_productid_unique",
+        "replenishmenttable_productid_unique": {
+          "name": "replenishmenttable_productid_unique",
           "nullsNotDistinct": false,
-          "columns": ["productid"]
+          "columns": [
+            "productid"
+          ]
         }
       },
       "policies": {},
@@ -570,29 +753,17 @@
         "id": {
           "name": "id",
           "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "userid": {
-          "name": "userid",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "firstname": {
-          "name": "firstname",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "middlename": {
-          "name": "middlename",
-          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
         "lastname": {
           "name": "lastname",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "agentcode": {
+          "name": "agentcode",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -676,22 +847,36 @@
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "usertable_id_agentcode_pk": {
+          "name": "usertable_id_agentcode_pk",
+          "columns": [
+            "id",
+            "agentcode"
+          ]
+        }
+      },
       "uniqueConstraints": {
-        "usertable_userid_unique": {
-          "name": "usertable_userid_unique",
-          "nullsNotDistinct": false,
-          "columns": ["userid"]
-        },
         "usertable_username_unique": {
           "name": "usertable_username_unique",
           "nullsNotDistinct": false,
-          "columns": ["username"]
+          "columns": [
+            "username"
+          ]
         },
         "usertable_email_unique": {
           "name": "usertable_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
+        },
+        "unique_agentcode": {
+          "name": "unique_agentcode",
+          "nullsNotDistinct": false,
+          "columns": [
+            "agentcode"
+          ]
         }
       },
       "policies": {},
@@ -703,22 +888,33 @@
     "public.eaccounttype": {
       "name": "eaccounttype",
       "schema": "public",
-      "values": ["customer", "admin"]
-    },
-    "public.ecategorytype": {
-      "name": "ecategorytype",
-      "schema": "public",
-      "values": ["bags", "shoes", "clothes", "jewelry", "watches", "others"]
+      "values": [
+        "customer",
+        "admin",
+        "admin_secretary",
+        "admin_viewer",
+        "admin_level_one",
+        "admin_level_two",
+        "admin_level_three"
+      ]
     },
     "public.eoriginsite": {
       "name": "eoriginsite",
       "schema": "public",
-      "values": ["facebook", "shoppee", "chicberry"]
+      "values": [
+        "facebook",
+        "shoppee",
+        "chicberry"
+      ]
     },
     "public.estatustype": {
       "name": "estatustype",
       "schema": "public",
-      "values": ["pending", "ondelivery", "success"]
+      "values": [
+        "pending",
+        "ondelivery",
+        "success"
+      ]
     }
   },
   "schemas": {},

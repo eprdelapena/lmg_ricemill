@@ -6,6 +6,7 @@ import {
   timestamp,
   boolean,
   numeric,
+  unique,
   primaryKey
 } from "drizzle-orm/pg-core";
 import { UserTable } from "./table_user";
@@ -27,5 +28,6 @@ export const ProductTable = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.id, table.productid] }),
+    unique("unique_productid").on(table.productid),
   ]
 );

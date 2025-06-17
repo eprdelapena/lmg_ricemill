@@ -8,6 +8,8 @@ import {
   timestamp,
   pgEnum,
   uniqueIndex,
+  primaryKey,
+  unique
 } from "drizzle-orm/pg-core";
 
 export const EAccountType = pgEnum("eaccounttype", [
@@ -20,20 +22,27 @@ export const EAccountType = pgEnum("eaccounttype", [
   "admin_level_three",
 ]);
 
-export const UserTable = pgTable("usertable", {
-  id: serial("id").primaryKey().notNull(),
-  fullname: varchar("lastname", { length: 255 }).notNull(),
-  agentcode: varchar("agentcode", { length: 255 }).notNull(),
-  username: varchar("username", { length: 255 }).notNull().unique(),
-  password: varchar("password", { length: 255 }).notNull(),
-  salt: char("salt", { length: 5 }).notNull().default(""),
-  mobile: varchar("mobile", { length: 11 }).notNull(),
-  email: varchar("email", { length: 255 }).notNull().unique(),
-  token: varchar("token", { length: 100 }).notNull().default(""),
-  eaccounttype: EAccountType("eaccounttype").default("customer"),
-  regdate: timestamp("regdate").notNull(),
-  lastdate: timestamp("lastdate").notNull(),
-  lastip: varchar("lastip", { length: 255 }),
-  lastdevice: varchar("lastdevice", { length: 255 }),
-  lastlocation: varchar("lastlocation", { length: 255 }),
-});
+export const UserTable = pgTable(
+  "usertable", 
+  {
+    id: serial("id").notNull(),
+    fullname: varchar("lastname", { length: 255 }).notNull(),
+    agentcode: varchar("agentcode", { length: 255 }).notNull(),
+    username: varchar("username", { length: 255 }).notNull().unique(),
+    password: varchar("password", { length: 255 }).notNull(),
+    salt: char("salt", { length: 5 }).notNull().default(""),
+    mobile: varchar("mobile", { length: 11 }).notNull(),
+    email: varchar("email", { length: 255 }).notNull().unique(),
+    token: varchar("token", { length: 100 }).notNull().default(""),
+    eaccounttype: EAccountType("eaccounttype").default("customer"),
+    regdate: timestamp("regdate").notNull(),
+    lastdate: timestamp("lastdate").notNull(),
+    lastip: varchar("lastip", { length: 255 }),
+    lastdevice: varchar("lastdevice", { length: 255 }),
+    lastlocation: varchar("lastlocation", { length: 255 }),
+  },
+  (table) => [
+    primaryKey({ columns: [table.id, table.agentcode] }),
+    unique("unique_agentcode").on(table.agentcode),
+  ]
+);

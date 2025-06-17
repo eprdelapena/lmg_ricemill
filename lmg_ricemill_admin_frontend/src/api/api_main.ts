@@ -173,10 +173,9 @@ class NextClient {
   }
   
   public async mainGetProductCategory(
-    payload: TParamsGetProductCategory,
     config: TRequestConfig,
   ): Promise<TResponseMainAPI<TDataGetProductCategory>> {
-    return await this.client.post("/v9/get/productcategory", payload, config);
+    return await this.client.post("/v9/get/productcategory", {}, config);
   }
 
   public async mainPostProductCategory(

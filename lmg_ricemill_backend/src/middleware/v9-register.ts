@@ -14,17 +14,17 @@ const MW_v9_register = async (
   res: Response<IResponseSuccess<IRegister> | IResponseFail>,
   next: NextFunction,
 ): Promise<void> => {
-  const { firstname, lastname, mobile, email, middlename, password, username } =
+  const { fullname, agentcode, mobile, email, estatustype, password, username } =
     req.body;
 
   const isEmpty: boolean =
-    !firstname ||
-    !lastname ||
+    !estatustype ||
+    !agentcode ||
     !mobile ||
     !email ||
     !password ||
     !username ||
-    !middlename;
+    !fullname;
 
   if (isEmpty) {
     res.status(200).json(RequestStatusObject.invalidField);
@@ -32,43 +32,18 @@ const MW_v9_register = async (
   }
 
   const isTypeError =
-    typeof firstname !== "string" ||
-    typeof lastname !== "string" ||
+    typeof estatustype !== "string" ||
+    typeof agentcode !== "string" ||
     typeof password !== "string" ||
     typeof email !== "string" ||
     typeof mobile !== "string" ||
     typeof username !== "string" ||
-    typeof middlename !== "string";
+    typeof fullname !== "string";
 
   if (isTypeError) {
     res.status(200).json(RequestStatusObject.invalidField);
     return;
   }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const mobileRegex = /^09\d{9}$/;
-  const specialCharRegex = /[^a-zA-Z0-9]/;
-
-  // if (!emailRegex.test(email)) {
-  //   res.status(200).json(RequestStatusObject.invalidFieldEmail);
-  //   return;
-  // }
-
-  // if (!mobileRegex.test(mobile)) {
-  //   res.status(200).json(RequestStatusObject.invalidFieldMobile);
-  //   return;
-  // }
-
-  // if (password.includes(" ") || username.includes(" ")) {
-  //   res.status(200).json(RequestStatusObject.invalidFieldPassword);
-  //   return;
-  // }
-
-  // const fields = [firstname, lastname, mobile, password, username, middlename];
-  // if (fields.some((field) => specialCharRegex.test(field))) {
-  //   res.status(200).json(RequestStatusObject.invalidFieldSpecialCharacters);
-  //   return;
-  // }
 
   const queryUser = await db.query.users.findFirst({
     where: or(eq(users.username, username), eq(users.email, email)),

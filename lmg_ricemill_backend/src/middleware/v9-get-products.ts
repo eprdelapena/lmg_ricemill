@@ -34,7 +34,7 @@ const MW_v9_get_products = async (
     return;
   }
 
-  if(skip && typeof skip !== "string"){
+  if(skip && typeof skip !== "number"){
     res.status(200).json({
       status: 407,
       message: "Invalid parameter"

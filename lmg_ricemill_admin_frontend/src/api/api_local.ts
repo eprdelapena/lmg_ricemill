@@ -11,6 +11,7 @@ import {
   TParamsDeleteLogTable,
   TParamsDeleteOrderUser,
   TParamsDeleteProduct,
+  TParamsDeleteProductCategory,
   TParamsDeleteUser,
   TParamsEditAdmin,
   TParamsEditInstallment,
@@ -23,6 +24,7 @@ import {
   TParamsGetMonthlyIncome,
   TParamsGetOrderUser,
   TParamsGetPendingOrders,
+  TParamsGetProductCategory,
   TParamsGetProducts,
   TParamsLogin,
   TParamsOrderGenerateBarcode,
@@ -30,6 +32,7 @@ import {
   TParamsPostInstallment,
   TParamsPostOrderUser,
   TParamsPostProduct,
+  TParamsPostProductCategory,
   TParamsRegister,
   TParamsViewOrderItem,
   TResponseLogin,
@@ -42,6 +45,33 @@ class CApiLocal extends AxiosService {
     payload: TParamsLogin,
   ): Promise<TResponseMainAPI<TResponseLogin>> {
     return await this.sendByPost({ url: "/api/admin/login", data: payload });
+  }
+
+  async localGetProductCategory(
+    payload: TParamsGetProductCategory,
+  ): Promise<TResponseMainAPI<{id: number, category: string, agentcode: string}[]>> {
+    return await this.sendByPost({
+      url: "/api/admin/get_productcategory",
+      data: payload,
+    });
+  }
+
+  async localDeleteProductCategory(
+    payload: TParamsDeleteProductCategory,
+  ): Promise<TResponseMainAPI> {
+    return await this.sendByPost({
+      url: "/api/admin/delete_productcategory",
+      data: payload,
+    });
+  }
+
+  async localPostProductCategory(
+    payload: TParamsPostProductCategory,
+  ): Promise<TResponseMainAPI> {
+    return await this.sendByPost({
+      url: "/api/admin/post_productcategory",
+      data: payload,
+    });
   }
 
   async localGetOrderUser(

@@ -22,9 +22,8 @@ const v9_register = async (
     password,
     email,
     mobile,
-    firstname,
-    middlename,
-    lastname,
+    agentcode,
+    fullname,
     estatustype,
   } = req.body;
 
@@ -48,18 +47,17 @@ const v9_register = async (
   const geo = geoip.lookup(ipAddress as string);
   const location = geo ? geo.city + ", " + geo.country : "Unknown Location";
 
-  let accounttype: TAdminClassification = EAccountType.customer;
+  let accounttype: TAdminClassification = EAccountType.admin;
 
-  let isAdmin = req.headers["admin-key"];
+  // let isAdmin = req.headers["admin-key"];
 
-  if (isAdmin && isAdmin === "12345" && estatustype) {
-    accounttype = estatustype as TAdminClassification;
-  }
+  // if (isAdmin && isAdmin === "12345" && estatustype) {
+  //   accounttype = estatustype as TAdminClassification;
+  // }
 
   const newUser = {
-    firstname,
-    lastname,
-    middlename,
+    fullname,
+    agentcode,
     username,
     password: hashedPassword,
     salt,
@@ -74,7 +72,7 @@ const v9_register = async (
     lastlocation: location,
   };
 
-  const result = await db.insert(users).values(newUser);
+  await db.insert(users).values(newUser);
   res.status(200).json(RequestStatusObject.success);
 };
 
