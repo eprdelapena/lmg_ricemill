@@ -185,7 +185,7 @@ export type TParamsGetProductCategory = {
 }
 
 export type TParamsDeleteProduct = {
-  productid: number;
+  productid: string;
 };
 
 export type TParamsGetProducts = {
@@ -332,27 +332,16 @@ export type TParamsGenerateBarcode = {
 };
 
 export type TDataGetOrderUser = {
-  id: number;
-  orderid: string;
-  username: string;
-  receiverfirstname: string;
-  receiverlastname: string;
-  type: string;
-  currentpayment: string;
-  cuurentpayment: string;
-  receivermobile: string;
-  region: string;
-
-  municity: string;
-  barangay: string;
-
-  address: string;
-  estatustype: string;
-  originsite: string;
-  downpayment: string;
-  totalcost: string;
-  province: string;
-  orderdate: string;
+  id: number,
+  transactionid: string,
+  fullname: string,
+  agentcode: string,
+  spouse: string,
+  address: string,
+  mobile: string,
+  currentpayment: string,
+  totalcost: string,
+  transactiondate: string
 };
 
 // {

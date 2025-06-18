@@ -11,9 +11,10 @@ import { UserDataContext } from "@/hooks/context/main_context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Plus, ShoppingCart, PlaySquare } from "lucide-react"
+import { Search, Plus, ShoppingCart, PlaySquare, LoaderPinwheel } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import CCategoryModal from "./cproduct_postcategorymodal"
+import { FaMagnifyingGlass } from "react-icons/fa6"
 
 const CProductSearch = (props: {
   initialPayload: Omit<TParamsGetProducts, "skip">
@@ -21,9 +22,10 @@ const CProductSearch = (props: {
   setPayload: (value: React.SetStateAction<Omit<TParamsGetProducts, "skip">>) => void
   getV1GetProduct: () => Promise<void>
   getProductCategory: () => Promise<void>
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>
   categoryList: {id: number, category: string, agentcode: string}[]
 }) => {
-  const { initialPayload, setInitialPayload, setPayload, getV1GetProduct, categoryList, getProductCategory } = props
+  const { initialPayload, setInitialPayload, setCurrentPage, setPayload, getV1GetProduct, categoryList, getProductCategory } = props
   const userData = useContext(UserDataContext)
   const { eaccounttype } = userData!
 
@@ -71,16 +73,15 @@ const CProductSearch = (props: {
                     }))
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bags">Bags</SelectItem>
-                    <SelectItem value="shoes">Shoes</SelectItem>
-                    <SelectItem value="clothes">Clothes</SelectItem>
-                    <SelectItem value="jewelry">Jewelry</SelectItem>
-                    <SelectItem value="watches">Watches</SelectItem>
-                    <SelectItem value="others">Others</SelectItem>
+                    {
+                      categoryList.map((item, index) =>  <SelectItem value={item.category} key={index}>{item.category}</SelectItem>)
+                    }
+                   
+
                   </SelectContent>
                 </Select>
               ) : (
@@ -107,17 +108,34 @@ const CProductSearch = (props: {
                 onClick={() => {
                   setPayload(initialPayload)
                 }}
-                className="flex cursor-pointer hover:bg-gray-400 hover:text-white transition items-center gap-2"
+                className="flex cursor-pointer bg-blue-500 hover:bg-blue-700 hover:text-white transition items-center gap-2"
               >
                 <Search className="h-4 w-4 " />
                 Search
               </Button>
 
+              <Button
+                  onClick={() => {
+                    setPayload((prev) => ({
+                      searchText: undefined,
+                      searchType: undefined
+                    }))
+                    setCurrentPage(1)
+                    setInitialPayload((prev) => ({
+                      searchText: ""
+                    }))
+                  }}
+                  variant="secondary"
+                  className="flex cursor-pointer hover:text-white bg-orange-500 hover:bg-orange-700 text-white items-center gap-2"
+                >
+                  <LoaderPinwheel className="h-4 w-4" />
+                  Reset
+                </Button>
 
               <Button 
                 asChild 
                 variant="outline" 
-                className="cursor-pointer flex bg-gray-800 text-white items-center gap-2"
+                className="cursor-pointer flex bg-violet-500 hover:bg-violet-700 text-white hover:text-white items-center gap-2"
                 onClick={() => {
                   setCategoryModal(true);
                 }}  
@@ -134,7 +152,7 @@ const CProductSearch = (props: {
                     setPostModal(true)
                   }}
                   variant="secondary"
-                  className="flex cursor-pointer hover:text-white hover:bg-gray-800 items-center gap-2"
+                  className="flex cursor-pointer hover:text-white bg-green-500 hover:bg-green-700 text-white items-center gap-2"
                 >
                   <Plus className="h-4 w-4" />
                   Add Product

@@ -11,7 +11,8 @@ export enum EParamsDefault {
   ondelivery="ondelivery",
   pending="pending",
   notpaid="notpaid",
-  paid="paid"
+  paid="paid",
+  wordCash = "cash"
 }
 
 export enum EAccountType {

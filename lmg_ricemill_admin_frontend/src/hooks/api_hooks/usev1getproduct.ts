@@ -8,14 +8,16 @@ const useV1GetProduct = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [productList, setProductList] = useState<TDataGetProducts[]>([]);
   const [payload, setPayload] = useState<Omit<TParamsGetProducts, "skip">>({
-    searchType: undefined,
-    searchText: undefined,
+    searchType: "" as any,
+    searchText: "",
   });
 
   const getV1GetProduct = async () => {
     const response = await Instance_ApiLocal.localGetProduct({
       skip: currentPage,
-      ...payload,
+      searchText: !payload?.searchText || payload?.searchText?.length === 0 ? undefined : payload.searchText,
+      searchType: !payload?.searchType || payload?.searchType?.length === 0 ? undefined as any : payload.searchType,
+
     });
 
     if (response.status !== EAPIStatusCodes.success) {

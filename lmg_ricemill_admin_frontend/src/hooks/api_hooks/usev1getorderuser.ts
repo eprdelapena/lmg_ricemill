@@ -13,7 +13,7 @@ const useV1GetOrderUser = () => {
     end: undefined,
     category: undefined,
     search: undefined,
-    status: EParamsDefault.notpaid,
+    status: undefined,
   });
   const getV1GetOrderUser = async () => {
     const response = await Instance_ApiLocal.localGetOrderUser({

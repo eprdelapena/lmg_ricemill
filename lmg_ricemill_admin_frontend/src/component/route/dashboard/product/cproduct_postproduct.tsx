@@ -97,35 +97,6 @@ const CPostProductModal = (props: {
             </div>
 
 
-            {/* Pricing Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Buying Price */}
-
-              {/* Selling Price */}
-              <div className="space-y-2 ">
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                  <DollarSign className="h-4 w-4 text-green-500" />
-                  Selling Price
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
-                    ₱
-                  </span>
-                  <Input
-                    type="number"
-                    placeholder="0.00"
-                    value={payload.price}
-                    onChange={(e) => {
-                      setPayload((prev) => ({
-                        ...prev,
-                        price: e.target.value,
-                      }))
-                    }}
-                    className="border-2 border-gray-200 focus:border-green-400 bg-green-50/30 shadow-sm h-12 text-base pl-8"
-                  />
-                </div>
-              </div>
-            </div>
 
 
           </form>

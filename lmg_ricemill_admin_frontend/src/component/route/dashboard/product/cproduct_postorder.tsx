@@ -8,6 +8,7 @@ import { useContext } from "react"
 import ReactDOM from "react-dom"
 import Swal from "sweetalert2"
 import { ShoppingCart, Package, X, Shirt, Footprints, Star, Tag } from "lucide-react"
+import { EParamsDefault } from "@/enum/main_enum"
 
 const CPostOrderModal = (props: {
   setPostOrderModal: (value: React.SetStateAction<boolean>) => void
@@ -15,62 +16,13 @@ const CPostOrderModal = (props: {
 }) => {
   const { product, setPostOrderModal } = props
   const userData = useContext(UserDataContext)
-  const { username } = userData as TUserSession
+
   const { payload, setPayload, getV1AddToCart } = useV1AddToCart()
 
-  const validateNumberInput = (value: string, maxQuantity?: number) => {
-    if (isNaN(Number(value))) {
-      Swal.fire({
-        title: "Error",
-        text: "This field must be a number",
-        icon: "error",
-        confirmButtonText: "Try again",
-      })
-      return false
-    }
-    return true
-  }
-
-  const handleQuantityChange = (field: string, value: string) => {
-    if (validateNumberInput(value)) {
-      setPayload((prev) => ({
-        ...prev,
-        [field]: Number(value),
-      }))
-    }
-  }
 
   const handleSave = () => {
-    const quantityTotal =
-      Number(payload.quantitydefault) +
-      Number(payload.quantityxxs) +
-      Number(payload.quantityxs) +
-      Number(payload.quantittys) +
-      Number(payload.quantitym) +
-      Number(payload.quantityl) +
-      Number(payload.quantityxl) +
-      Number(payload.quantityxxl) +
-      Number(payload.quantity5) +
-      Number(payload.quantity55) +
-      Number(payload.quantity6) +
-      Number(payload.quantity65) +
-      Number(payload.quantity7) +
-      Number(payload.quantity75) +
-      Number(payload.quantity8) +
-      Number(payload.quantity85) +
-      Number(payload.quantity9) +
-      Number(payload.quantity95) +
-      Number(payload.quantity100) +
-      Number(payload.quantity105) +
-      Number(payload.quantitty110) +
-      Number(payload.quantity115) +
-      Number(payload.quantity120)
-
     getV1AddToCart(
-      {
-        price: (Number(product.price) * quantityTotal).toLocaleString().replace(",", ""),
-        productId: product.productid,
-      },
+      product.productid,
       userData?.username!,
       {
         title: product.title,
@@ -80,34 +32,7 @@ const CPostOrderModal = (props: {
     setPostOrderModal(false)
   }
 
-  // Group sizes for better organization
-  const clothingSizes = [
-    { label: "XXS", value: payload.quantityxxs, field: "quantityxxs", current: product.quantityxxs },
-    { label: "XS", value: payload.quantityxs, field: "quantityxs", current: product.quantityxs },
-    { label: "S", value: payload.quantittys, field: "quantittys", current: product.quantitys },
-    { label: "M", value: payload.quantitym, field: "quantitym", current: product.quantitym },
-    { label: "L", value: payload.quantityl, field: "quantityl", current: product.quantityl },
-    { label: "XL", value: payload.quantityxl, field: "quantityxl", current: product.quantityxl },
-    { label: "XXL", value: payload.quantityxxl, field: "quantityxxl", current: product.quantityxxl },
-  ]
 
-  const shoeSizes = [
-    { label: "5.0", value: payload.quantity5, field: "quantity5", current: product.quantity5 },
-    { label: "5.5", value: payload.quantity55, field: "quantity55", current: product.quantity55 },
-    { label: "6.0", value: payload.quantity6, field: "quantity6", current: product.quantity6 },
-    { label: "6.5", value: payload.quantity65, field: "quantity65", current: product.quantity65 },
-    { label: "7.0", value: payload.quantity7, field: "quantity7", current: product.quantity7 },
-    { label: "7.5", value: payload.quantity75, field: "quantity75", current: product.quantity75 },
-    { label: "8.0", value: payload.quantity8, field: "quantity8", current: product.quantity8 },
-    { label: "8.5", value: payload.quantity85, field: "quantity85", current: product.quantity85 },
-    { label: "9.0", value: payload.quantity9, field: "quantity9", current: product.quantity9 },
-    { label: "9.5", value: payload.quantity95, field: "quantity95", current: product.quantity95 },
-    { label: "10.0", value: payload.quantity100, field: "quantity100", current: product.quantity100 },
-    { label: "10.5", value: payload.quantity105, field: "quantity105", current: product.quantity105 },
-    { label: "11.0", value: payload.quantitty110, field: "quantitty110", current: product.quantity110 },
-    { label: "11.5", value: payload.quantity115, field: "quantity115", current: product.quantity115 },
-    { label: "12.0", value: payload.quantity120, field: "quantity120", current: product.quantity120 },
-  ]
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 bg-gradient-to-br from-black/60 via-purple-900/20 to-black/60 backdrop-blur-sm flex justify-center items-center z-50 p-4 overflow-y-auto">
@@ -165,101 +90,58 @@ const CPostOrderModal = (props: {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Price</span>
+                      <span className="text-sm font-medium text-gray-500 uppercase tracking-wide"> (₱) Total amount</span>
                     </div>
-                    <p className="font-bold text-2xl bg-gradient-to-r from-emerald-600 to-green-500 bg-clip-text text-transparent">
-                    ₱{product.price}
-                    </p>
+                    <input 
+                      className="p-1 border-black border-solid border-[1px] rounded-md"
+                      value={payload.price}
+                      onChange={(e) => {
+                        setPayload((prev) => ({
+                          ...prev,
+                          price: e.target.value
+                        }))
+                      }}
+                    >
+                    
+                    </input>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Default Quantity */}
-            <div className="mb-8">
+            {
+              product.category !== EParamsDefault.wordCash.toLocaleUpperCase()
+              &&
+              <div className="mb-8">
               <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
                 <label className="block mb-4 font-semibold text-gray-800 flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  Default Quantity
+                  Quantity
                   <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
-                    {product.quantitydefault} available
+                    {product.quantity} available
                   </span>
                 </label>
                 <input
                   className="w-full p-4 rounded-xl border-2 border-gray-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 outline-none transition-all duration-200 text-lg font-medium"
-                  type="text"
-                  value={payload.quantitydefault}
-                  onChange={(e) => handleQuantityChange("quantitydefault", e.target.value)}
+                  type="number"
+                  value={payload.quantity}
+                  onChange={(e) => {
+                    setPayload((prev) => ({
+                      ...prev,
+                      quantity: Number(e.target.value)
+                    }))
+                  }}
                   placeholder="Enter quantity"
                 />
               </div>
             </div>
+            }
 
-            {/* Clothing Sizes */}
-            {clothingSizes.length > 0 && (
-              <div className="mb-8">
-                <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-gradient-to-br from-pink-500 to-rose-500 p-2 rounded-lg">
-                      <Shirt className="h-5 w-5 text-white" />
-                    </div>
-                    <h4 className="font-bold text-xl text-gray-800">Clothing Sizes</h4>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {clothingSizes.map((size) => (
-                      <div key={size.field} className="group">
-                        <label className="block mb-2 text-sm font-medium text-gray-700 flex items-center justify-between">
-                          <span className="bg-gray-100 px-2 py-1 rounded-lg font-bold">{size.label}</span>
-                          <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-full">
-                            {size.current} left
-                          </span>
-                        </label>
-                        <input
-                          className="w-full p-3 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-pink-100 focus:border-pink-400 outline-none transition-all duration-200 group-hover:border-pink-300"
-                          type="text"
-                          value={size.value}
-                          onChange={(e) => handleQuantityChange(size.field, e.target.value)}
-                          placeholder="0"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
 
-            {/* Shoe Sizes */}
-            {shoeSizes.length > 0 && (
-              <div className="mb-8">
-                <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-gradient-to-br from-amber-500 to-orange-500 p-2 rounded-lg">
-                      <Footprints className="h-5 w-5 text-white" />
-                    </div>
-                    <h4 className="font-bold text-xl text-gray-800">Shoe Sizes</h4>
-                  </div>
-                  <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-3">
-                    {shoeSizes.map((size) => (
-                      <div key={size.field} className="group">
-                        <label className="block mb-2 text-xs font-medium text-gray-700 text-center">
-                          <span className="bg-amber-100 text-amber-800 px-2 py-1 rounded-lg font-bold text-sm">
-                            {size.label}
-                          </span>
-                          <div className="text-xs text-gray-500 mt-1">{size.current} left</div>
-                        </label>
-                        <input
-                          className="w-full p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-amber-100 focus:border-amber-400 outline-none transition-all duration-200 group-hover:border-amber-300 text-center text-sm"
-                          type="text"
-                          value={size.value}
-                          onChange={(e) => handleQuantityChange(size.field, e.target.value)}
-                          placeholder="0"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+
+
+       
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200">

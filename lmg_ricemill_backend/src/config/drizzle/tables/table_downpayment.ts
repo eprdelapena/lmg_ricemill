@@ -13,7 +13,7 @@ export const InstallmentTable = pgTable(
   "installmenttable", 
   {
   id: serial("id").notNull(),
-  transactionid: varchar("transactionid", { length: 255 }).notNull().references(() => OrderUserTable.transactionid),
+  transactionid: varchar("transactionid", { length: 255 }).notNull(),
   agentcode: varchar("agentcode", { length: 255 }).notNull(),
   installment: numeric("installment", {
     precision: 10,

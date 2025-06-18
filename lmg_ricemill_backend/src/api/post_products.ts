@@ -29,7 +29,6 @@ const v9_post_products = async (
   let newValues = { 
     quantity: quantity!,
     category: category?.toLocaleUpperCase()!,
-    price: price!,
     title: title!?.toLocaleUpperCase() || '',
     agentcode: (req as any).agentcode,
     regdate: regDateObj,

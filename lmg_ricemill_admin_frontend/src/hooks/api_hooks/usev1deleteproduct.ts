@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 const useV1DeleteProduct = () => {
   const getV1DeleteProduct = async (payload: {
-    productid: number;
+    productid: string;
     callbackFunction?: any;
   }) => {
     const confirmation = await Swal.fire({

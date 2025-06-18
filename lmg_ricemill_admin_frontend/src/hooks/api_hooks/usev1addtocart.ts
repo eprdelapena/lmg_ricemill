@@ -4,44 +4,35 @@ import Swal from "sweetalert2";
 
 const useV1AddToCart = () => {
   const [payload, setPayload] = useState<
-    Omit<TParamsPostOrders, "productId" | "price" | "cost">
+    Omit<TParamsPostOrders, "productid">
   >({
-    quantityxxs: 0,
-    quantityxs: 0,
-    quantittys: 0,
-    quantitym: 0,
-    quantityl: 0,
-    quantityxl: 0,
-    quantityxxl: 0,
-    quantity5: 0,
-    quantity55: 0,
-    quantity6: 0,
-    quantity65: 0,
-    quantity7: 0,
-    quantity75: 0,
-    quantity8: 0,
-    quantity85: 0,
-    quantity9: 0,
-    quantity95: 0,
-    quantity100: 0,
-    quantity105: 0,
-    quantitty110: 0,
-    quantity115: 0,
-    quantity120: 0,
-    quantitydefault: 0,
+    quantity: 0,
+    price: "0.00"
   });
 
   const getV1AddToCart = (
-    params: Pick<TParamsPostOrders, "price" | "productId">,
+    productid: string,
     userId: string,
     additional: {
       title: string;
       category: string;
     },
   ) => {
+    if (
+      isNaN(Number(payload.price)) ||
+      !/^\d+(\.\d{1,2})?$/.test(payload.price)
+    ) {
+      Swal.fire({
+        title: "Error",
+        text: "Price must be a number with no more than two decimal places",
+        icon: "error",
+        confirmButtonText: "Try again",
+      });
+      return;
+    }
     const localStorageKey = `cartItems_${userId}`;
     const currentItem: TParamsPostOrders & { title: string } = {
-      ...params,
+      productid,
       ...payload,
       ...additional,
     };
@@ -51,6 +42,7 @@ const useV1AddToCart = () => {
 
     if (existingCart) {
       cartArray = JSON.parse(existingCart);
+
     }
 
     cartArray.push(currentItem);

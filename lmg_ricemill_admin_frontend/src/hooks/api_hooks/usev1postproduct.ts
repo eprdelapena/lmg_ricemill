@@ -9,7 +9,7 @@ const useV1PostProduct = () => {
   const [payload, setPayload] = useState<TParamsPostProduct>({
     title: "",
     category: "",
-    price: "",
+    price: "0.00",
     quantity: 0
   });
 
@@ -40,25 +40,7 @@ const useV1PostProduct = () => {
       return;
     }
     
-    if (isNaN(Number(price))) {
-      await Swal.fire({
-        title: "Error",
-        text: "Price must be a number",
-        icon: "error",
-        confirmButtonText: "Try again",
-      });
-      return;
-    }
 
-    if (!isValidDecimal(price)) {
-      await Swal.fire({
-        title: "Error",
-        text: "Price field must not exceed two decimal places",
-        icon: "error",
-        confirmButtonText: "Try again",
-      });
-      return;
-    }
 
     Swal.fire({
       title: "Loading",
@@ -72,6 +54,7 @@ const useV1PostProduct = () => {
 
     const response = await Instance_ApiLocal.localPostProduct({
       ...payload,
+      title: payload.title.toLocaleUpperCase()
     });
 
     Swal.close();

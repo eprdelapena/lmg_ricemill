@@ -15,8 +15,8 @@ import useV1GetProductCategory from "@/hooks/api_hooks/use_get_productcategory"
 
 const ProductTable = (props: { userData: TUserSession }) => {
   const [initialPayload, setInitialPayload] = useState<Omit<TParamsGetProducts, "skip">>({
-    searchType: undefined,
-    searchText: undefined,
+    searchType: "" as any,
+    searchText: "",
   })
   const { userData } = props
 
@@ -76,6 +76,7 @@ const ProductTable = (props: { userData: TUserSession }) => {
             </CardHeader>
             <CardContent className="space-y-6">
               <CProductSearch
+              setCurrentPage={setCurrentPage}
                 getV1GetProduct={getV1GetProduct}
                 initialPayload={initialPayload}
                 setInitialPayload={setInitialPayload}
@@ -87,6 +88,7 @@ const ProductTable = (props: { userData: TUserSession }) => {
               <div className="rounded-lg border bg-white">
                 <CProductTableBody
                   productList={productList}
+                  categories={categories}
                   getV1DeleteProduct={getV1DeleteProduct}
                   getV1GetProduct={getV1GetProduct}
                 />

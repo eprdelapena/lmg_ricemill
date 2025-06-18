@@ -10,21 +10,27 @@ import CProductImageModal from "./cproduct_imagemodal"
 import { useSession } from "next-auth/react"
 import CProductBarcodeModal from "./cproduct_generatebarcode"
 import CPendingOrderModal from "./cproduct_pendingordermodal"
-import { TableCell, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Edit, Trash2, ShoppingCart, QrCode, Eye, Calendar, TrendingUp, TrendingDown, Minus } from "lucide-react"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Edit, Trash2, ShoppingCart, Calendar, TrendingUp, TrendingDown, Minus, Package } from "lucide-react"
+import { EParamsDefault } from "@/enum/main_enum"
 
-const ProductTableContent = (props: {
+const ProductCardContent = (props: {
   product: TDataGetProducts
   getV1DeleteProduct: (payload: {
-    productid: number
+    productid: string
     callbackFunction?: any
   }) => Promise<void>
   getV1GetProduct: () => Promise<void>
+  categories: {
+    id: number
+    category: string
+    agentcode: string
+  }[]
   index: number
 }) => {
-  const { product, getV1DeleteProduct, getV1GetProduct, index } = props
+  const { product, getV1DeleteProduct, getV1GetProduct, index, categories } = props
   const userData = useContext(UserDataContext)
 
   const [editModal, setEditModal] = useState<boolean>(false)
@@ -36,41 +42,13 @@ const ProductTableContent = (props: {
   const { eaccounttype } = userData as TUserSession
   const { data: session } = useSession()
 
-  const totalQuantity = [
-    "quantitydefault",
-    "quantityxxs",
-    "quantityxs",
-    "quantitys",
-    "quantitym",
-    "quantityl",
-    "quantityxl",
-    "quantityxxl",
-    "quantity5",
-    "quantity55",
-    "quantity6",
-    "quantity65",
-    "quantity7",
-    "quantity75",
-    "quantity8",
-    "quantity85",
-    "quantity9",
-    "quantity95",
-    "quantity100",
-    "quantity105",
-    "quantity110",
-    "quantity115",
-    "quantity120",
-  ].reduce((sum, key) => {
-    return sum + Number((product as any)[key] || 0)
-  }, 0)
-
   const getStockStatus = (quantity: number) => {
     if (quantity === 0) return { color: "bg-red-500", text: "Out of Stock", icon: Minus }
     if (quantity <= 10) return { color: "bg-orange-500", text: "Low Stock", icon: TrendingDown }
     return { color: "bg-green-500", text: "In Stock", icon: TrendingUp }
   }
 
-  const stockStatus = getStockStatus(totalQuantity)
+  const stockStatus = getStockStatus(product.quantity)
 
   const getCategoryColor = (category: string) => {
     const colors = {
@@ -86,190 +64,137 @@ const ProductTableContent = (props: {
 
   return (
     <>
-      <TableRow
-        className={`hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300 border-b border-gray-100 ${
-          index % 2 === 0 ? "bg-white" : "bg-gray-50/30"
-        }`}
-      >
-        <TableCell className="text-center w-40 py-6">
-          <div className="flex justify-center">
-            <div className="relative group">
-              <img
-                className="h-28 w-36 rounded-xl object-cover border-2 border-gray-200 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105"
-                src={product?.image || "/placeholder.svg?height=112&width=144"}
-                alt={product.title}
-              />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 rounded-xl transition-all duration-300" />
+      <Card className="hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-blue-300 bg-gradient-to-br from-white to-gray-50">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between mb-2">
+            <Badge className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-mono text-xs px-2 py-1 shadow-md">
+              ID: #{product.productid}
+            </Badge>
+            <div className="flex items-center gap-1 text-xs text-gray-500 bg-gray-100 rounded-full px-2 py-1">
+              <Calendar className="h-3 w-3" />
+              {new Date(product.regdate).toLocaleDateString()}
             </div>
           </div>
-        </TableCell>
 
-        <TableCell className="text-center py-6">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setPendingOrderModal(true)}
-            className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 border border-emerald-200 hover:border-emerald-300 transition-all duration-200"
-          >
-            <Eye className="h-4 w-4 mr-2" />
-            View Orders
-          </Button>
-        </TableCell>
-
-        <TableCell className="text-center py-6">
-          <Badge className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-mono text-sm px-3 py-1 shadow-md">
-            #{product.productid}
-          </Badge>
-        </TableCell>
-
-        <TableCell className="text-center py-6">
-          <div className="flex items-center justify-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-lg px-3 py-2">
-            <Calendar className="h-4 w-4 text-blue-500" />
-            {new Date(product.regdate).toLocaleDateString()}
+          {/* Product Image Placeholder */}
+          <div className="w-full h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center mb-3">
+            <Package className="h-12 w-12 text-gray-400" />
           </div>
-        </TableCell>
 
-        {eaccounttype !== "admin_viewer" && (
-          <TableCell className="text-center w-56 py-6">
-            <Button
-              variant="ghost"
-              onClick={() => {
-                const cart = localStorage.getItem(`cartItems_${userData?.username}`)
-
-                if (JSON.parse(cart as string)) {
-                  const result = (JSON.parse(cart as string) as { productId: number }[]).some(
-                    (item) => item.productId === product.productid,
-                  )
-                  if (result) {
-                    Swal.fire({
-                      title: "Error",
-                      text: "This item has already been added to the cart",
-                      icon: "error",
-                      confirmButtonText: "Try again",
-                    })
-                    return
-                  }
-                }
-
-                setOrderModal(true)
-              }}
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 whitespace-nowrap px-6 py-2.5 w-full"
-            >
-              <ShoppingCart className="h-5 w-5 mr-2" />
-              Add to Customer Cart
-            </Button>
-          </TableCell>
-        )}
-
-        <TableCell className="text-center font-semibold w-64 py-6">
-          <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg px-4 py-3 border border-gray-200 mx-2">
-            <div className="truncate text-gray-800 font-medium text-base" title={product.title}>
+          <div className="space-y-2">
+            <h3 className="font-semibold text-gray-800 text-sm line-clamp-2 min-h-[2.5rem]" title={product.title}>
               {product.title}
+            </h3>
+
+            <Badge className={`capitalize font-medium text-xs px-2 py-1 border ${getCategoryColor(product.category)}`}>
+              {product.category}
+            </Badge>
+          </div>
+        </CardHeader>
+
+        <CardContent className="pt-0 space-y-3">
+          {/* Admin-specific information */}
+          {["admin", "admin_viewer", "admin_secretary"].includes(eaccounttype) && (
+            <div className="space-y-2">
+
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-600">Stock:</span>
+                  <Badge
+                    className={`${stockStatus.color} text-white font-bold text-xs px-2 py-1 shadow-sm flex items-center gap-1`}
+                  >
+                    <stockStatus.icon className="h-3 w-3" />
+                    {product.category !== EParamsDefault.wordCash.toLocaleUpperCase() ? `${product.quantity} pcs` :  ""}
+                  </Badge>
+                </div>
+    
+
+              {/* Add other admin fields like selling price, buying price if they exist in your schema */}
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className="space-y-2 pt-2 border-t border-gray-100">
+            {eaccounttype !== "admin_viewer" && (
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  const cart = localStorage.getItem(`cartItems_${userData?.username}`)
+
+                  if (JSON.parse(cart as string)) {
+                    const result = (JSON.parse(cart as string) as { productId: string }[]).some(
+                      (item) => item.productId === product.productid,
+                    )
+                    if (result) {
+                      Swal.fire({
+                        title: "Error",
+                        text: "This item has already been added to the cart",
+                        icon: "error",
+                        confirmButtonText: "Try again",
+                      })
+                      return
+                    }
+                  }
+
+                  setOrderModal(true)
+                }}
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 w-full text-xs py-2"
+              >
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                Add to Cart
+              </Button>
+            )}
+
+            <div className="flex gap-2">
+              {!["admin_level_one", "admin_viewer"].includes(eaccounttype) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setEditModal(true)}
+                  className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 flex-1 text-xs"
+                >
+                  <Edit className="h-3 w-3 mr-1" />
+                  Edit
+                </Button>
+              )}
+
+              {!["admin_level_one", "admin_level_two"].includes(eaccounttype) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    const cart = localStorage.getItem(`cartItems_${userData?.username}`)
+
+                    if (JSON.parse(cart as string)) {
+                      const result = (JSON.parse(cart as string) as { productId: number }[]).filter(
+                        (item) => item.productId !== product.id,
+                      )
+                      localStorage.setItem(`cartItems_${userData?.username}`, JSON.stringify(result))
+                    }
+
+                    getV1DeleteProduct({
+                      productid: product.productid,
+                      callbackFunction: getV1GetProduct,
+                    })
+                  }}
+                  className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 flex-1 text-xs"
+                >
+                  <Trash2 className="h-3 w-3 mr-1" />
+                  Delete
+                </Button>
+              )}
             </div>
           </div>
-        </TableCell>
+        </CardContent>
+      </Card>
 
-        <TableCell className="text-center py-6">
-          <Badge className={`capitalize font-medium px-3 py-1 border ${getCategoryColor(product.category)}`}>
-            {product.category}
-          </Badge>
-        </TableCell>
-
-        <TableCell className="text-center py-6">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setBarcodeModal(true)}
-            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            <QrCode className="h-4 w-4 mr-2" />
-            Generate
-          </Button>
-        </TableCell>
-
-        {["admin", "admin_viewer", "admin_secretary"].includes(eaccounttype) && (
-          <>
-            <TableCell className="text-center font-bold text-emerald-600 py-6">
-              <div className="bg-emerald-50 rounded-lg px-3 py-2 border border-emerald-200">
-                ₱{Number(product.price).toLocaleString()}
-              </div>
-            </TableCell>
-            <TableCell className="text-center font-bold text-red-600 py-6">
-              <div className="bg-red-50 rounded-lg px-3 py-2 border border-red-200">
-                ₱{Number(product.cost).toLocaleString()}
-              </div>
-            </TableCell>
-            <TableCell className="text-center py-6">
-              <div className="flex items-center justify-center">
-                <Badge
-                  className={`${stockStatus.color} text-white font-bold px-3 py-2 shadow-md flex items-center gap-1`}
-                >
-                  <stockStatus.icon className="h-4 w-4" />
-                  {totalQuantity} pcs
-                </Badge>
-              </div>
-            </TableCell>
-            <TableCell className="text-center py-6">
-              <Badge variant="outline" className="bg-blue-50 border-blue-200 text-blue-800 font-semibold px-3 py-1">
-                {Number(product.pendingorders).toLocaleString()}
-              </Badge>
-            </TableCell>
-          </>
-        )}
-
-        {!["admin_level_one", "admin_viewer"].includes(eaccounttype) && (
-          <TableCell className="text-center py-6">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setEditModal(true)}
-              className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 p-2"
-            >
-              <Edit className="h-4 w-4" />
-            </Button>
-          </TableCell>
-        )}
-
-        {!["admin_level_one", "admin_level_two"].includes(eaccounttype) && (
-          <TableCell className="text-center py-6">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                if (product.pendingorders > 0) {
-                  Swal.fire({
-                    title: "Error",
-                    text: "You cannot delete a product with pending orders",
-                    icon: "error",
-                    confirmButtonText: "Try again",
-                  })
-                  return
-                }
-
-                const cart = localStorage.getItem(`cartItems_${userData?.username}`)
-
-                if (JSON.parse(cart as string)) {
-                  const result = (JSON.parse(cart as string) as { productId: number }[]).filter(
-                    (item) => item.productId !== product.id,
-                  )
-                  localStorage.setItem(`cartItems_${userData?.username}`, JSON.stringify(result))
-                }
-
-                getV1DeleteProduct({
-                  productid: Number(product.productid),
-                  callbackFunction: getV1GetProduct,
-                })
-              }}
-              className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 p-2"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </TableCell>
-        )}
-      </TableRow>
-
+      {/* Modals - keeping all existing modal logic */}
       {editModal && (
-        <CEditProductModal setEditModal={setEditModal} product={product} getV1GetProduct={getV1GetProduct} />
+        <CEditProductModal
+          categories={categories}
+          setEditModal={setEditModal}
+          product={product}
+          getV1GetProduct={getV1GetProduct}
+        />
       )}
       {orderModal && <CPostOrderModal setPostOrderModal={setOrderModal} product={product} />}
       {imageModal && <CProductImageModal setImageModal={setImageModal} product={product} />}
@@ -279,4 +204,4 @@ const ProductTableContent = (props: {
   )
 }
 
-export default ProductTableContent
+export default ProductCardContent

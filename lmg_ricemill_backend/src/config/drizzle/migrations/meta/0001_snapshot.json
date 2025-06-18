@@ -1,6 +1,6 @@
 {
-  "id": "e164050b-fcd6-4ff8-bc9f-24f6fff523f2",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "784868ca-0bda-4810-bd8d-44cdb528cce7",
+  "prevId": "e164050b-fcd6-4ff8-bc9f-24f6fff523f2",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -103,21 +103,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "installmenttable_transactionid_orderusertable_transactionid_fk": {
-          "name": "installmenttable_transactionid_orderusertable_transactionid_fk",
-          "tableFrom": "installmenttable",
-          "tableTo": "orderusertable",
-          "columnsFrom": [
-            "transactionid"
-          ],
-          "columnsTo": [
-            "transactionid"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {
         "installmenttable_id_transactionid_pk": {
           "name": "installmenttable_id_transactionid_pk",
@@ -280,19 +266,6 @@
           ],
           "columnsTo": [
             "productid"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "ordertable_transactionid_orderusertable_transactionid_fk": {
-          "name": "ordertable_transactionid_orderusertable_transactionid_fk",
-          "tableFrom": "ordertable",
-          "tableTo": "orderusertable",
-          "columnsFrom": [
-            "transactionid"
-          ],
-          "columnsTo": [
-            "transactionid"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"

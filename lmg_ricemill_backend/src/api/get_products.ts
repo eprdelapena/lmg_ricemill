@@ -30,10 +30,10 @@ const v9_get_products = async (
   const productList = await db.query.product.findMany({
     where: and(
       searchType === ESearchTypeProducts.category
-        ? eq(ProductTable.category, searchText as TCategoryProducts)
+        ? eq(ProductTable.category, searchText as TCategoryProducts || "")
         : undefined,
       searchType === ESearchTypeProducts.productid
-        ? eq(ProductTable.productid, searchText as TCategoryProducts)
+        ? eq(ProductTable.productid, searchText as TCategoryProducts || "")
         : undefined,
       searchType === ESearchTypeProducts.title
         ? ilike(product.title, `%${searchText}%`)

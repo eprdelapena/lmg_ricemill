@@ -20,7 +20,7 @@ export const ProductTable = pgTable(
     productid: varchar("productid", { length: 6 }).notNull(),
     agentcode: varchar("agentcode", { length: 255 }).notNull().references(() => UserTable.agentcode),
     title: varchar("title", { length: 255 }).notNull(),
-    price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+    price: numeric("price", { precision: 10, scale: 2 }).$default(() => "0.00").notNull(),
     isshow: boolean("isshow").notNull().default(true),
     category: varchar("category", { length: 255 }).notNull(),
     quantity: integer("quantity").notNull().$default(() => 0),

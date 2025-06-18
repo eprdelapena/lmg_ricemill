@@ -42,10 +42,10 @@ const v9_get_orderuser = async (
       ? eq(OrderUserTable.transactionid, search)
       : undefined,
       status === "paid"
-      ? gte(OrderUserTable.totalcost, OrderUserTable.currentpayment)
+      ? lt(OrderUserTable.totalcost, OrderUserTable.currentpayment)
       : undefined,
       status === "notpaid"
-        ? lt(OrderUserTable.totalcost, OrderUserTable.currentpayment)
+        ? gte(OrderUserTable.totalcost, OrderUserTable.currentpayment)
       : undefined,
       dateBegin ? gte(OrderUserTable.transactiondate, dateBegin) : undefined,
       dateEnd ? lte(OrderUserTable.transactiondate, dateEnd) : undefined,
