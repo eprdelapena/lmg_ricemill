@@ -51,16 +51,14 @@ export type TParamsEditProduct = {
 
 export type TParamsGetInstallment = {
   transactionid: string;
-  skip?: number;
 };
 
 export type TDataGetInstallment = {
   id: number;
-  orderid: string;
-  username: string;
+  transactionid: string;
   installment: string;
-  installmentdate: string;
   description: string;
+  installmentdate: string;
 };
 
 export type TParamsEditAdmin = {
@@ -77,42 +75,14 @@ export type TParamsPostProduct = {
 
 export type TDataViewOrderItem = {
   id: number;
-  orderid: string;
-  productid: number;
-  username: string;
-  price: string;
-  title: string;
-  category: string;
-  orderquantity: number;
-  orderdate: string;
-  quantityxxs: number;
-  quantityxs: number;
-  quantitys: number;
-  quantitym: number;
-  quantityl: number;
-  quantityxl: number;
-  quantityxxl: number;
-  quantity5: number;
-  quantity55: number;
-  quantity6: number;
-  quantity65: number;
-  quantity7: number;
-  quantity75: number;
-  quantity8: number;
-  quantity85: number;
-  quantity9: number;
-  quantity95: number;
-  quantity100: number;
-  quantity105: number;
-  quantity110: number;
-  quantity115: number;
-  quantity120: number;
-
-  quantitydefault: number;
+  productid: string;
+  quantity: number;
+  productname: string;
 };
+
 export type TParamsViewOrderItem = {
-  orderid: string;
-  skip: number;
+  transactionid: string;
+
 };
 
 export type TDataGetMonthlyIncome = {

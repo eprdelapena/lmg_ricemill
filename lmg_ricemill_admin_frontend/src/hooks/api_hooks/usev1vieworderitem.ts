@@ -8,12 +8,11 @@ const useV1ViewOrderItem = () => {
   const [orderList, setOrderList] = useState<TDataViewOrderItem[]>([]);
   const [currentSkip, setCurrentSkip] = useState<number>(1);
 
-  const getV1ViewOrderItem = async (payload: { orderid: string }) => {
-    const { orderid } = payload;
+  const getV1ViewOrderItem = async (payload: { transactionid: string }) => {
+    const { transactionid } = payload;
 
     const response = await Instance_ApiLocal.localViewOrderItem({
-      skip: currentSkip,
-      orderid,
+     transactionid
     });
 
     if (response.status !== EAPIStatusCodes.success) {

@@ -5,7 +5,9 @@ import type { TDataGetOrderUser } from "@/schema/main_schema"
 import { useState } from "react"
 import COrdersModalEditStatus from "./corders_modaleditstatus"
 import { EAdminRoutes } from "@/enum/main_enum"
-import { Eye, Trash2, Calendar, User, MapPin, Phone, CreditCard, Package, Info } from "lucide-react"
+import { Eye, Trash2, Calendar, CircleDollarSignIcon, User, MapPin, Phone, CreditCard, Package, Info } from "lucide-react"
+import COrdersViewModal from "./corders_viewordersmodal"
+import CInstallmentModal from "./corders_installmentmodal"
 
 const COrdersTableBody = (props: {
   order: TDataGetOrderUser
@@ -15,6 +17,8 @@ const COrdersTableBody = (props: {
   const { order, index, getV1GetOrderUser } = props
   const [editStatusModal, setEditStatusModal] = useState<boolean>(false)
   const [viewDetailsModal, setViewDetailsModal] = useState<boolean>(false)
+  const [viewOrdersModal, setViewOrdersModal] = useState<boolean>(false);
+  const [viewPaymentModal, setViewPaymentModal] = useState<boolean>(false);
 
   const { getV1DeleteOrderUser } = useV1DeleteOrderUser()
 
@@ -103,15 +107,22 @@ const COrdersTableBody = (props: {
                 className="px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 border border-blue-200 text-blue-700 rounded-lg font-medium text-sm transition-all duration-200 flex items-center gap-2"
               >
                 <Info className="h-4 w-4" />
-                View Details
+                Details
               </button>
-              <a
-                href={`${EAdminRoutes.DASHBOARDVIEWORDER}/${order.transactionid}`}
+              <button
+                onClick={() => setViewOrdersModal(true)}
                 className="px-4 py-2 bg-gradient-to-r from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 border border-purple-200 text-purple-700 rounded-lg font-medium text-sm transition-all duration-200 flex items-center gap-2"
               >
                 <Eye className="h-4 w-4" />
-                View Orders
-              </a>
+                Orders
+              </button>
+              <button
+                onClick={() => setViewPaymentModal(true)}
+                className="px-4 py-2 bg-gradient-to-r from-yellow-50 to-green-50 hover:from-green-100 hover:to-yellow-100 border border-purple-200 text-purple-700 rounded-lg font-medium text-sm transition-all duration-200 flex items-center gap-2"
+              >
+                <CircleDollarSignIcon className="h-4 w-4" />
+                Payments
+              </button>
             </div>
             <button
               onClick={() => {
@@ -262,6 +273,21 @@ const COrdersTableBody = (props: {
           order={order}
         />
       )}
+      {
+        viewOrdersModal && (
+          <>
+            <COrdersViewModal transactionId={order.transactionid} setViewItemsModal={setViewOrdersModal}/>
+          </>
+        )
+      }
+      {
+        viewPaymentModal &&
+        (
+          <>
+            <CInstallmentModal setInstallmentModal={setViewPaymentModal} params={{transactionid: order.transactionid}}/>
+          </>
+        )
+      }
     </>
   )
 }

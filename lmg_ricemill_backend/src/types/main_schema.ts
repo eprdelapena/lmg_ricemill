@@ -172,7 +172,7 @@ export interface IProduct {
 }
 
 export type TParamsViewOrderItem = {
-  orderid: string;
+  transactionid: string;
   skip: number;
 };
 

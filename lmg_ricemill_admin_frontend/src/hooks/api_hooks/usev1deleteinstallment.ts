@@ -1,13 +1,14 @@
 import Instance_ApiLocal from "@/api/api_local";
 import { EAPIStatusCodes } from "@/enum/main_enum";
-import { TParamsDeleteInstallment } from "@/schema/main_schema";
+import { TParamsDeleteInstallment, TParamsGetInstallment } from "@/schema/main_schema";
 import { signOut } from "next-auth/react";
 import Swal from "sweetalert2";
 
 const useV1DeleteInstallment = () => {
   const getV1DeleteInstallment = async (
     params: TParamsDeleteInstallment,
-    callbackFunction?: (...args: any[]) => any,
+    callbackFunction: (payload: TParamsGetInstallment) => any,
+    payload: TParamsGetInstallment
   ) => {
     const confirmation = await Swal.fire({
       title: "Are you sure?",
@@ -56,10 +57,10 @@ const useV1DeleteInstallment = () => {
     });
 
     if (callbackFunction) {
-      callbackFunction();
+      callbackFunction(payload!);
     }
 
-    window.location.reload();
+
     return;
   };
 

@@ -57,7 +57,7 @@ const useV1PostInstallment = () => {
       callBackFunction();
     }
 
-    window.location.reload();
+
     return;
   };
 

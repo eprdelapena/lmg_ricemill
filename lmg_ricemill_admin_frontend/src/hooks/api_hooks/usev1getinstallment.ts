@@ -20,7 +20,7 @@ const useV1GetInstallment = () => {
       return;
     }
 
-    setInstallmentList(response.data!);
+    setInstallmentList(response.data!.filter((item) => Number(item.installment) > 0));
     return;
   };
 

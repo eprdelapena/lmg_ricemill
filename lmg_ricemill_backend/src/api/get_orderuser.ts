@@ -35,6 +35,7 @@ const v9_get_orderuser = async (
 
   const userList = await db.query.orderuser.findMany({
     where: and(
+    eq(OrderUserTable.isshow, true),
     category === "fullname" && search
       ? ilike(OrderUserTable.fullname, `%${search}%`)
       : undefined,
