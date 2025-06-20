@@ -16,7 +16,7 @@ const v9_post_installment = async (
   req: Request<{}, {}, TParamsPostInstallment>,
   res: Response<IResponseSuccess<any> | IResponseFail>,
 ): Promise<void> => {
-  const { transactionid, description, amount } = req.body;
+  const { transactionid, description, transactiondate, amount } = req.body;
 
   if(!transactionid || typeof transactionid !== "string"){
     res.status(200).json({
@@ -60,6 +60,7 @@ const v9_post_installment = async (
     transactionid,
     installment: amount,
     description,
+    installmentdate: transactiondate ? new Date(transactiondate) : new Date(),
     agentcode: (req as any).agentcode
   };
 

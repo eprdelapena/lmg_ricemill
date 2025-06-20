@@ -20,7 +20,8 @@ const v9_view_order_item = async (
       id: OrderTable.id,
       productid: OrderTable.productid,
       quantity: OrderTable.quantity,
-      productname: ProductTable.title
+      productname: ProductTable.title,
+      price: OrderTable.price
     })
     .from(OrderTable)
     .where(and(eq(OrderTable.transactionid, transactionid), eq(OrderTable.agentcode, agentcode)))

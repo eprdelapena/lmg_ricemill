@@ -5,7 +5,7 @@ import type React from "react"
 import ReactDOM from "react-dom"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { X, Package, Hash, ShoppingCart, Eye, Loader2 } from "lucide-react"
+import { X, Package, Hash, ShoppingCart, Eye, Loader2, DollarSign } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const COrdersViewModal = (props: {
@@ -172,7 +172,11 @@ const COrdersViewModal = (props: {
                           <Badge variant="outline" className="text-xs">
                             ID: {item.productid}
                           </Badge>
+                          <button className="text-xs border-solid border-green-800 border-[1px] bg-green-200 text-green-800 rounded-md p-1">
+                            Cost: ₱ {Number(item.price).toLocaleString()}
+                          </button>
                         </div>
+                        
                       </div>
                     </div>
 

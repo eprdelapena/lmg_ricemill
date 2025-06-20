@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 const useV1DeleteInstallment = () => {
   const getV1DeleteInstallment = async (
     params: TParamsDeleteInstallment,
-    callbackFunction: (payload: TParamsGetInstallment) => any,
+    callbackFunction: () => any,
     payload: TParamsGetInstallment
   ) => {
     const confirmation = await Swal.fire({
@@ -57,7 +57,7 @@ const useV1DeleteInstallment = () => {
     });
 
     if (callbackFunction) {
-      callbackFunction(payload!);
+      callbackFunction();
     }
 
 

@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const useV1ViewOrderItem = () => {
   const [orderList, setOrderList] = useState<TDataViewOrderItem[]>([]);
-  const [currentSkip, setCurrentSkip] = useState<number>(1);
+
 
   const getV1ViewOrderItem = async (payload: { transactionid: string }) => {
     const { transactionid } = payload;
@@ -26,8 +26,6 @@ const useV1ViewOrderItem = () => {
 
   return {
     orderList,
-    currentSkip,
-    setCurrentSkip,
     getV1ViewOrderItem,
   };
 };

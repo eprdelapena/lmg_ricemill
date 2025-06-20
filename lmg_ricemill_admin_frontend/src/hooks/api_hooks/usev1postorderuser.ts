@@ -13,6 +13,7 @@ const useV1PostOrderUser = () => {
     fullname: "",
     spouse: "",
     address: "",
+    transactiondate: undefined,
     mobile: "",
     description: "",
     currentpayment: "0.00",
@@ -33,9 +34,21 @@ const useV1PostOrderUser = () => {
       spouse,
       address,
       mobile,
+      transactiondate,
       description,
       currentpayment
     } = payload;
+
+    if(!transactiondate){
+      Swal.fire({
+        title: "Error",
+        text: "Date field is required",
+        icon: "error",
+        confirmButtonText: "Try again",
+      });
+      return;
+    }
+
 
     if(!fullname){
       Swal.fire({

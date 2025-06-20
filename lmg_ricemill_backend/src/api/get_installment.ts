@@ -18,7 +18,7 @@ const v9_get_installment = async (
 
   const paymentList = await db.query.installment.findMany({
     where: and(eq(InstallmentTable.transactionid, transactionid), eq(InstallmentTable.agentcode, (req as any).agentcode)),
-    orderBy: desc(OrderUserTable.id),
+    orderBy: desc(InstallmentTable.installmentdate),
   });
 
   res.status(200).json({

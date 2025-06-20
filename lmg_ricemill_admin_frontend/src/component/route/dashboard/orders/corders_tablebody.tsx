@@ -5,7 +5,7 @@ import type { TDataGetOrderUser } from "@/schema/main_schema"
 import { useState } from "react"
 import COrdersModalEditStatus from "./corders_modaleditstatus"
 import { EAdminRoutes } from "@/enum/main_enum"
-import { Eye, Trash2, Calendar, CircleDollarSignIcon, User, MapPin, Phone, CreditCard, Package, Info } from "lucide-react"
+import { Eye, Trash2, Calendar, CircleDollarSignIcon, User, MapPin, Phone, CreditCard, Package, Info, UserCircle2 } from "lucide-react"
 import COrdersViewModal from "./corders_viewordersmodal"
 import CInstallmentModal from "./corders_installmentmodal"
 
@@ -88,7 +88,7 @@ const COrdersTableBody = (props: {
                 <div className="text-sm text-gray-600">Balance</div>
                 {isPaid ? (
                   <div className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200 px-2 py-1 rounded-lg text-sm font-semibold inline-block">
-                    FULLY PAID
+                    PAID
                   </div>
                 ) : (
                   <div className="font-bold text-red-600">₱{remainingBalance.toLocaleString()}</div>
@@ -249,6 +249,21 @@ const COrdersTableBody = (props: {
                   </div>
                 </div>
               </div>
+
+                            {/* Transaction Info */}
+                            <div className="bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl p-4 border border-gray-200">
+                <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                  <UserCircle2 className="h-5 w-5 text-gray-600" />
+                  Description
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+
+                    <div className="font-medium text-gray-800">{order.description}</div>
+                  </div>
+
+                </div>
+              </div>
             </div>
 
             {/* Modal Footer */}
@@ -284,7 +299,7 @@ const COrdersTableBody = (props: {
         viewPaymentModal &&
         (
           <>
-            <CInstallmentModal setInstallmentModal={setViewPaymentModal} params={{transactionid: order.transactionid}}/>
+            <CInstallmentModal getV1GetOrderUser={getV1GetOrderUser} setInstallmentModal={setViewPaymentModal} params={{transactionid: order.transactionid}}/>
           </>
         )
       }

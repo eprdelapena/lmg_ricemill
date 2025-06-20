@@ -11,13 +11,24 @@ const useV1PostInstallment = () => {
   >({
     amount: undefined,
     description: "",
+    transactiondate: undefined
   });
   const getV1PostInstallment = async (
     params: Pick<TParamsPostInstallment, "transactionid">,
     callBackFunction?: (params?: any) => any,
   ) => {
-    const { amount, description } = payload;
+    const { amount, description, transactiondate } = payload;
     const { transactionid } = params;
+
+    if(!transactiondate){
+      await Swal.fire({
+        title: "Error",
+        text: "Date field is required",
+        icon: "error",
+        confirmButtonText: "Try again",
+      });
+      return;
+    }
 
     if (Number(amount) <= 0 || isNaN(Number(amount))) {
       await Swal.fire({
@@ -32,7 +43,8 @@ const useV1PostInstallment = () => {
     const response = await Instance_ApiLocal.localPostInstallment({
       amount: payload.amount!,
       transactionid,
-      description: description || ""
+      description: description || "",
+      transactiondate: transactiondate || new Date()
     });
 
     if (response.status !== EAPIStatusCodes.success) {

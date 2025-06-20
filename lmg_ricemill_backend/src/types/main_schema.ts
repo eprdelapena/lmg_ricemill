@@ -180,6 +180,7 @@ export type TParamsPostInstallment = {
   amount: string;
   transactionid: string;
   description: string;
+  transactiondate: Date;
 };
 
 export type TParamsGetInstallment = {
@@ -359,6 +360,7 @@ export type TPostOrderUserParams = {
   fullname: string,
   spouse: string,
   address: string,
+  transactiondate: Date,
   mobile: string,
   description: string,
   currentpayment: string,

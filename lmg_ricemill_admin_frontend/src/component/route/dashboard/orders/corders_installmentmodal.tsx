@@ -12,8 +12,9 @@ import useV1DeleteInstallment from "@/hooks/api_hooks/usev1deleteinstallment"
 const CInstallmentModal = (props: {
   setInstallmentModal: React.Dispatch<React.SetStateAction<boolean>>
   params: TParamsGetInstallment
+  getV1GetOrderUser: () => any,
 }) => {
-  const { setInstallmentModal, params } = props
+  const { setInstallmentModal, params, getV1GetOrderUser } = props
   const { installmentList, getV1GetInstallment } = useV1GetInstallment()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -21,6 +22,12 @@ const CInstallmentModal = (props: {
   const [showAddPaymentModal, setShowAddPaymentModal] = useState(false)
   const {getV1DeleteInstallment} = useV1DeleteInstallment();
 
+  const callbackFunction = async () => {
+    await Promise.all([
+      getV1GetInstallment(params),
+      getV1GetOrderUser()
+    ])
+  }
   useEffect(() => {
     const fetchInstallments = async () => {
       if (params) {
@@ -359,7 +366,7 @@ const CInstallmentModal = (props: {
                                 id: installment.id,
                                 transactionid: installment.transactionid
                               },
-                              getV1GetInstallment,
+                              callbackFunction,
                               {
                                 transactionid: installment.transactionid
                               }
@@ -408,7 +415,7 @@ const CInstallmentModal = (props: {
       <DescriptionModal />
 
       {/* Add Payment Modal */}
-      <AddPaymentModal getV1GetInstallment={getV1GetInstallment} showAddPaymentModal={showAddPaymentModal} params={params} setShowAddPaymentModal={setShowAddPaymentModal}/>
+      <AddPaymentModal getV1GetInstallment={getV1GetInstallment} getV1GetOrderUser={getV1GetOrderUser} showAddPaymentModal={showAddPaymentModal} params={params} setShowAddPaymentModal={setShowAddPaymentModal}/>
     </>
   )
 }

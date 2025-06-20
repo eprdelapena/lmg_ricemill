@@ -109,8 +109,38 @@ const COrdersTable = () => {
                     }}
                   />
                 </div>
+                
               </div>
 
+            {/* Enhanced Action Buttons */}
+            <div className="flex flex-row gap-4 mt-8">
+              <button
+                onClick={() => {
+                  setCurrentPayload(initialPayload)
+                  setCurrentSkip(1)
+                }}
+                className="h-12 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold flex items-center gap-2"
+              >
+                <Search className="h-5 w-5" />
+                Search Orders
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentPayload({
+                    begin: undefined,
+                    end: undefined,
+                    category: undefined,
+                    search: undefined,
+                    status: undefined,
+                  })
+                  setCurrentSkip(1)
+                }}
+                className="h-12 px-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold flex items-center gap-2"
+              >
+                <CircuitBoard className="h-5 w-5" />
+                Reset Filters
+              </button>
+            </div>
               {/* Order Status */}
               <div className="space-y-3">
                 <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -182,35 +212,6 @@ const COrdersTable = () => {
               </div>
             </div>
 
-            {/* Enhanced Action Buttons */}
-            <div className="flex flex-row gap-4 mt-8">
-              <button
-                onClick={() => {
-                  setCurrentPayload(initialPayload)
-                  setCurrentSkip(1)
-                }}
-                className="h-12 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold flex items-center gap-2"
-              >
-                <Search className="h-5 w-5" />
-                Search Orders
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentPayload({
-                    begin: undefined,
-                    end: undefined,
-                    category: undefined,
-                    search: undefined,
-                    status: undefined,
-                  })
-                  setCurrentSkip(1)
-                }}
-                className="h-12 px-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold flex items-center gap-2"
-              >
-                <CircuitBoard className="h-5 w-5" />
-                Reset Filters
-              </button>
-            </div>
           </div>
         </div>
 

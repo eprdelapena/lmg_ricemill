@@ -9,14 +9,22 @@ import ReactDOM from "react-dom"
 const AddPaymentModal = (props: {
     showAddPaymentModal: boolean,
     setShowAddPaymentModal: React.Dispatch<React.SetStateAction<boolean>>
+    getV1GetOrderUser: () => Promise<void>
     getV1GetInstallment: (params: TParamsGetInstallment) => Promise<void>
     params: TParamsGetInstallment
 }) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const {showAddPaymentModal, params, getV1GetInstallment,  setShowAddPaymentModal} = props;
+    const {showAddPaymentModal, params, getV1GetInstallment, getV1GetOrderUser,  setShowAddPaymentModal} = props;
     const { getV1PostInstallment, payload, setPayload } = useV1PostInstallment()
 
     if (!showAddPaymentModal) return null
+
+    const callbackFunction = async () => {
+      await Promise.all([
+        getV1GetInstallment(params),
+        getV1GetOrderUser()
+      ])
+    }
 
     const handleAddPayment = async () => {
         if (!params.transactionid) return
@@ -24,7 +32,7 @@ const AddPaymentModal = (props: {
         setIsSubmitting(true)
         try {
           await getV1PostInstallment({ transactionid: params.transactionid }, () => {
-            getV1GetInstallment(params)
+            callbackFunction()
             setShowAddPaymentModal(false)
             setPayload({ amount: "", description: "" })
           })
@@ -83,6 +91,43 @@ const AddPaymentModal = (props: {
               <p className="font-mono text-sm bg-white px-3 py-2 rounded-lg border">{params.transactionid}</p>
             </div>
 
+            <div className="mt-6 space-y-2">
+                <label className="block text-sm font-semibold text-gray-700">
+                  Transaction Date <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    type="date"
+                    className={`${inputClass} pl-12`}
+                    value={
+                      payload?.transactiondate ? new Date(payload.transactiondate).toISOString().split("T")[0] : ""
+                    }
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setPayload((prev) => ({
+                        ...prev,
+                        transactiondate: new Date(e.target.value),
+                      }))
+                    }}
+                  />
+                </div>
+              </div>
+              
             {/* Amount Field */}
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -170,3 +215,6 @@ const AddPaymentModal = (props: {
 
 
   export default AddPaymentModal;
+
+    const inputClass =
+    "w-full p-4 rounded-xl text-gray-800 border-2 border-gray-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-100 transition-all duration-300 outline-none shadow-sm bg-gradient-to-r from-white to-gray-50 hover:border-purple-300"

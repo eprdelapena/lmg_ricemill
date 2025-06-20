@@ -5,7 +5,7 @@ import {
   IParamsGetOrderUser,
 } from "@/types/main_schema";
 import { db } from "@/config/drizzle/connectdb";
-import { and, desc, eq, gte, ilike, lte , lt} from "drizzle-orm";
+import { and, desc, eq, gte, ilike, lte , lt, gt} from "drizzle-orm";
 import { OrderUserTable } from "@/config/drizzle/tables/table_orderuser";
 
 const v9_get_orderuser = async (
@@ -32,7 +32,7 @@ const v9_get_orderuser = async (
     dateEnd = new Date(end);
   }
 
-
+  console.log(dateBegin, dateEnd);
   const userList = await db.query.orderuser.findMany({
     where: and(
     eq(OrderUserTable.isshow, true),
@@ -43,17 +43,17 @@ const v9_get_orderuser = async (
       ? eq(OrderUserTable.transactionid, search)
       : undefined,
       status === "paid"
-      ? lt(OrderUserTable.totalcost, OrderUserTable.currentpayment)
+      ? lte(OrderUserTable.totalcost, OrderUserTable.currentpayment)
       : undefined,
       status === "notpaid"
-        ? gte(OrderUserTable.totalcost, OrderUserTable.currentpayment)
+        ? gt(OrderUserTable.totalcost, OrderUserTable.currentpayment)
       : undefined,
       dateBegin ? gte(OrderUserTable.transactiondate, dateBegin) : undefined,
       dateEnd ? lte(OrderUserTable.transactiondate, dateEnd) : undefined,
     ),
     limit,
     offset,
-    orderBy: desc(OrderUserTable.id),
+    orderBy: desc(OrderUserTable.transactiondate),
   });
   res.status(200).json({
     message: "success",

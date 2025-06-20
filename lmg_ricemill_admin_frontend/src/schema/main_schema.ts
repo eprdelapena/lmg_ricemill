@@ -78,6 +78,7 @@ export type TDataViewOrderItem = {
   productid: string;
   quantity: number;
   productname: string;
+  price: string;
 };
 
 export type TParamsViewOrderItem = {
@@ -201,6 +202,7 @@ export type TParamsPostOrderUser = {
   fullname: string,
   spouse: string,
   address: string,
+  transactiondate: Date,
   mobile: string,
   description: string,
   currentpayment: string,
@@ -283,6 +285,7 @@ export type TParamsPostInstallment = {
   amount: string;
   transactionid: string;
   description: string;
+  transactiondate: Date | string; 
 };
 
 export type TParamsDeleteInstallment = {
@@ -306,6 +309,7 @@ export type TDataGetOrderUser = {
   transactionid: string,
   fullname: string,
   agentcode: string,
+  description: string,
   spouse: string,
   address: string,
   mobile: string,
